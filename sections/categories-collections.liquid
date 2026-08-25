@@ -1,0 +1,682 @@
+{{ 'categories-collections.css' | asset_url | stylesheet_tag }}
+
+<script
+  src="{{ 'categories-collections.js' | asset_url }}"
+  defer
+></script>
+
+
+<section
+  id="CategoriesCollections-{{ section.id }}"
+  class="categories-collections"
+  data-categories-collections
+  style="
+    --cc-background: {{ section.settings.background_color }};
+    --cc-text: {{ section.settings.text_color }};
+    --cc-accent: {{ section.settings.accent_color }};
+
+    --cc-heading-size-desktop: {{ section.settings.heading_size_desktop }}px;
+    --cc-heading-size-mobile: {{ section.settings.heading_size_mobile }}px;
+
+    --cc-title-size-desktop: {{ section.settings.title_size_desktop }}px;
+    --cc-title-size-mobile: {{ section.settings.title_size_mobile }}px;
+
+    --cc-copy-size-desktop: {{ section.settings.copy_size_desktop }}px;
+    --cc-copy-size-mobile: {{ section.settings.copy_size_mobile }}px;
+
+    --cc-card-height-desktop: {{ section.settings.card_height_desktop }}vh;
+    --cc-card-height-mobile: {{ section.settings.card_height_mobile }}vh;
+
+    --cc-gap: {{ section.settings.grid_gap }}px;
+
+    --cc-padding-top: {{ section.settings.padding_top }}px;
+    --cc-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --cc-padding-x: {{ section.settings.padding_horizontal }}px;
+  "
+>
+
+
+  <!-- =====================================================
+       SECTION HEADING
+  ====================================================== -->
+
+  <div class="categories-collections__header">
+
+    <div class="categories-collections__heading">
+
+      {% if section.settings.section_number != blank %}
+
+        <span class="categories-collections__number">
+          {{ section.settings.section_number }}.
+        </span>
+
+      {% endif %}
+
+
+      {% if section.settings.heading != blank %}
+
+        <h2 class="categories-collections__heading-text">
+          {{ section.settings.heading }}
+        </h2>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       COLLECTION GRID
+  ====================================================== -->
+
+  <div class="categories-collections__grid">
+
+    {% for block in section.blocks %}
+
+      {% liquid
+
+        assign collection_item = block.settings.collection
+
+        assign desktop_image = block.settings.image
+        assign mobile_image = block.settings.mobile_image
+
+        assign desktop_video = block.settings.video
+        assign mobile_video = block.settings.mobile_video
+
+        assign collection_url = block.settings.custom_link
+
+        if collection_url == blank and collection_item != blank
+          assign collection_url = collection_item.url
+        endif
+
+
+        assign collection_title = block.settings.title
+
+        if collection_title == blank and collection_item != blank
+          assign collection_title = collection_item.title
+        endif
+
+
+        assign collection_count = block.settings.custom_count
+
+        if collection_count == blank and collection_item != blank
+          assign collection_count = collection_item.all_products_count
+        endif
+
+      %}
+
+
+      <article
+        class="categories-collections__card"
+        data-category-card
+        {{ block.shopify_attributes }}
+      >
+
+        <a
+          href="{{ collection_url | default: '#' }}"
+          class="categories-collections__card-link"
+          data-category-link
+          aria-label="{{ collection_title | escape }}"
+        >
+
+
+          <!-- =================================================
+               BACKGROUND MEDIA
+          ================================================== -->
+
+          <div class="categories-collections__media">
+
+
+            <!-- ===============================================
+                 DESKTOP VIDEO
+            ================================================ -->
+
+            {% if desktop_video != blank %}
+
+              {{
+                desktop_video
+                | video_tag:
+                  class: 'categories-collections__video categories-collections__video--desktop',
+                  autoplay: true,
+                  loop: true,
+                  muted: true,
+                  controls: false,
+                  playsinline: true
+              }}
+
+            {% elsif desktop_image != blank %}
+
+              {{
+                desktop_image
+                | image_url: width: 2200
+                | image_tag:
+                  class: 'categories-collections__image categories-collections__image--desktop',
+                  loading: 'lazy',
+                  widths: '600, 900, 1200, 1600, 1900, 2200',
+                  sizes: '(min-width: 750px) 50vw, 100vw',
+                  alt: collection_title
+              }}
+
+            {% elsif collection_item != blank and collection_item.featured_image != blank %}
+
+              {{
+                collection_item.featured_image
+                | image_url: width: 2200
+                | image_tag:
+                  class: 'categories-collections__image categories-collections__image--desktop',
+                  loading: 'lazy',
+                  widths: '600, 900, 1200, 1600, 1900, 2200',
+                  sizes: '(min-width: 750px) 50vw, 100vw',
+                  alt: collection_title
+              }}
+
+            {% else %}
+
+              {{
+                'collection-1'
+                | placeholder_svg_tag:
+                  'categories-collections__placeholder'
+              }}
+
+            {% endif %}
+
+
+            <!-- ===============================================
+                 MOBILE VIDEO
+            ================================================ -->
+
+            {% if mobile_video != blank %}
+
+              {{
+                mobile_video
+                | video_tag:
+                  class: 'categories-collections__video categories-collections__video--mobile',
+                  autoplay: true,
+                  loop: true,
+                  muted: true,
+                  controls: false,
+                  playsinline: true
+              }}
+
+            {% elsif mobile_image != blank %}
+
+              {{
+                mobile_image
+                | image_url: width: 1400
+                | image_tag:
+                  class: 'categories-collections__image categories-collections__image--mobile',
+                  loading: 'lazy',
+                  widths: '400, 600, 800, 1000, 1200, 1400',
+                  sizes: '100vw',
+                  alt: collection_title
+              }}
+
+            {% endif %}
+
+          </div>
+
+
+          <!-- =================================================
+               TOP EDITORIAL COPY
+          ================================================== -->
+
+          {% if block.settings.top_copy != blank %}
+
+            <div
+              class="
+                categories-collections__copy
+                categories-collections__copy--{{ block.settings.copy_alignment }}
+              "
+            >
+              {{ block.settings.top_copy }}
+            </div>
+
+          {% endif %}
+
+
+          <!-- =================================================
+               BOTTOM INFORMATION
+          ================================================== -->
+
+          <div class="categories-collections__bottom">
+
+
+            <div class="categories-collections__title-wrap">
+
+              {% if collection_title != blank %}
+
+                <h3 class="categories-collections__title">
+                  {{ collection_title }}
+                </h3>
+
+              {% endif %}
+
+
+              {% if block.settings.subtitle != blank %}
+
+                <span class="categories-collections__subtitle">
+                  ({{ block.settings.subtitle }})
+                </span>
+
+              {% endif %}
+
+            </div>
+
+
+            {% if collection_count != blank %}
+
+              <span class="categories-collections__count">
+                [ {{ collection_count }} ]
+              </span>
+
+            {% endif %}
+
+          </div>
+
+
+          <!-- =================================================
+               MOBILE LINK LABEL
+          ================================================== -->
+
+          {% if section.settings.show_mobile_link %}
+
+            <span class="categories-collections__mobile-link">
+[&nbsp;{{ section.settings.cursor_text }}&nbsp;]
+            </span>
+
+          {% endif %}
+
+        </a>
+
+      </article>
+
+    {% endfor %}
+
+
+    {% if section.blocks.size == 0 %}
+
+      <div class="categories-collections__empty">
+        ADD COLLECTION BLOCKS
+      </div>
+
+    {% endif %}
+
+  </div>
+
+
+  <!-- =====================================================
+       CUSTOM CURSOR
+
+       One cursor is shared by all collection cards.
+  ====================================================== -->
+
+  <div
+    class="categories-collections__cursor"
+    data-category-cursor
+    aria-hidden="true"
+  >
+[&nbsp;{{ section.settings.cursor_text }}&nbsp;]
+  </div>
+
+</section>
+
+
+{% schema %}
+{
+  "name": "Categories collections",
+
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+
+    {
+      "type": "text",
+      "id": "section_number",
+      "label": "Section number",
+      "default": "05"
+    },
+
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "CATEGORIES"
+    },
+
+    {
+      "type": "range",
+      "id": "heading_size_desktop",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop heading size",
+      "default": 18
+    },
+
+    {
+      "type": "range",
+      "id": "heading_size_mobile",
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile heading size",
+      "default": 14
+    },
+
+
+    {
+      "type": "header",
+      "content": "Collection titles"
+    },
+
+    {
+      "type": "range",
+      "id": "title_size_desktop",
+      "min": 30,
+      "max": 140,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop collection title size",
+      "default": 74
+    },
+
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "min": 26,
+      "max": 90,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile collection title size",
+      "default": 50
+    },
+
+
+    {
+      "type": "header",
+      "content": "Editorial copy"
+    },
+
+    {
+      "type": "range",
+      "id": "copy_size_desktop",
+      "min": 8,
+      "max": 26,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop copy size",
+      "default": 11
+    },
+
+    {
+      "type": "range",
+      "id": "copy_size_mobile",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile copy size",
+      "default": 10
+    },
+
+
+    {
+      "type": "header",
+      "content": "Card sizing"
+    },
+
+    {
+      "type": "range",
+      "id": "card_height_desktop",
+      "min": 50,
+      "max": 120,
+      "step": 5,
+      "unit": "vh",
+      "label": "Desktop card height",
+      "default": 75
+    },
+
+    {
+      "type": "range",
+      "id": "card_height_mobile",
+      "min": 50,
+      "max": 110,
+      "step": 5,
+      "unit": "vh",
+      "label": "Mobile card height",
+      "default": 75
+    },
+
+    {
+      "type": "range",
+      "id": "grid_gap",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Gap between collections",
+      "default": 6
+    },
+
+
+    {
+      "type": "header",
+      "content": "Cursor"
+    },
+
+    {
+      "type": "text",
+      "id": "cursor_text",
+      "label": "Cursor text",
+      "default": "SEE COLLECTION"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_mobile_link",
+      "label": "Show See Collection text on mobile",
+      "default": true
+    },
+
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#fbf6f3"
+    },
+
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Main text",
+      "default": "#111111"
+    },
+
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent text",
+      "default": "#ff3b30"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 6
+    },
+
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 24
+    },
+
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 24
+    }
+
+  ],
+
+
+  "blocks": [
+
+    {
+      "type": "collection",
+      "name": "Collection",
+
+      "settings": [
+
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+
+
+        {
+          "type": "header",
+          "content": "Media"
+        },
+
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop image"
+        },
+
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Desktop video",
+          "info": "If selected, video replaces the desktop image."
+        },
+
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image"
+        },
+
+        {
+          "type": "video",
+          "id": "mobile_video",
+          "label": "Mobile video",
+          "info": "If selected, video replaces the mobile image."
+        },
+
+
+        {
+          "type": "header",
+          "content": "Content"
+        },
+
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Custom title",
+          "info": "Leave blank to use collection title."
+        },
+
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Title suffix",
+          "default": "GLAM"
+        },
+
+        {
+          "type": "richtext",
+          "id": "top_copy",
+          "label": "Top editorial text",
+          "default": "<p>INSPIRED BY BERLIN'S NIGHTLIFE, <strong>BERLIN VIBES</strong> CELEBRATES WOMEN'S BOLD SEXUALITY.</p>"
+        },
+
+        {
+          "type": "select",
+          "id": "copy_alignment",
+          "label": "Top text position",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+
+        {
+          "type": "text",
+          "id": "custom_count",
+          "label": "Custom count",
+          "info": "Leave blank to use the collection product count."
+        },
+
+        {
+          "type": "url",
+          "id": "custom_link",
+          "label": "Custom link",
+          "info": "Leave blank to link to the selected collection."
+        }
+
+      ]
+    }
+
+  ],
+
+  "max_blocks": 4,
+
+
+  "presets": [
+    {
+      "name": "Categories collections",
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

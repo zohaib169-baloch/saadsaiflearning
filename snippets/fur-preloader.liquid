@@ -1,0 +1,113 @@
+{% comment %}
+  THE FUR — HOME PAGE PRELOADER
+  Shows only on homepage.
+{% endcomment %}
+
+{% if settings.fur_preloader_enabled and request.page_type == 'index' %}
+
+<div
+  class="
+    fur-preloader
+    fur-preloader--fit-{{ settings.fur_preloader_image_fit }}
+  "
+  data-fur-preloader
+  data-image-fit="{{ settings.fur_preloader_image_fit }}"
+  aria-hidden="true"
+  style="
+    --fur-preloader-text-color: {{ settings.fur_preloader_text_color }};
+    --fur-preloader-background: {{ settings.fur_preloader_background }};
+  "
+>
+
+    <picture class="fur-preloader__picture">
+
+      {% if settings.fur_preloader_mobile_image != blank %}
+
+        <source
+          media="(max-width: 749px)"
+          srcset="
+            {{ settings.fur_preloader_mobile_image | image_url: width: 600 }} 600w,
+            {{ settings.fur_preloader_mobile_image | image_url: width: 900 }} 900w,
+            {{ settings.fur_preloader_mobile_image | image_url: width: 1200 }} 1200w
+          "
+        >
+
+      {% endif %}
+
+
+      {% if settings.fur_preloader_desktop_image != blank %}
+
+        {{
+          settings.fur_preloader_desktop_image
+          | image_url: width: 2400
+          | image_tag:
+            class: 'fur-preloader__background-image',
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '900, 1200, 1600, 1920, 2200, 2400',
+            alt: ''
+        }}
+
+      {% elsif settings.fur_preloader_mobile_image != blank %}
+
+        {{
+          settings.fur_preloader_mobile_image
+          | image_url: width: 1600
+          | image_tag:
+            class: 'fur-preloader__background-image',
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '600, 900, 1200, 1600',
+            alt: ''
+        }}
+
+      {% endif %}
+
+    </picture>
+
+
+    <div class="fur-preloader__loading">
+
+      <span>
+        {{ settings.fur_preloader_loading_text | default: 'LOADING' }}
+      </span>
+
+      <span
+        class="fur-preloader__dots"
+        aria-hidden="true"
+      >
+        <i></i>
+        <i></i>
+      </span>
+
+    </div>
+
+
+    <div
+      class="fur-preloader__percentage-wrap"
+      data-fur-preloader-percentage-wrap
+    >
+
+      <span
+        class="fur-preloader__percentage"
+        data-fur-preloader-percentage
+      >
+        0%
+      </span>
+
+    </div>
+
+
+    {% if settings.fur_preloader_bottom_text != blank %}
+
+      <div class="fur-preloader__tagline">
+        [
+        {{ settings.fur_preloader_bottom_text }}
+        ]
+      </div>
+
+    {% endif %}
+
+  </div>
+
+{% endif %}

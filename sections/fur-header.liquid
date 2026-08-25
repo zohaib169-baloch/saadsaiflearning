@@ -1,0 +1,536 @@
+{{ 'fur-header.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'fur-header.js' | asset_url }}" defer></script>
+
+{% liquid
+  assign fur_header_background_style = 'solid'
+
+  if request.page_type == 'index'
+    assign fur_header_background_style = section.settings.header_background_style
+  endif
+%}
+
+<header
+  class="
+    fur-header
+    fur-header--{{ fur_header_background_style }}
+    fur-header--position-{{ section.settings.header_position }}
+  "
+  data-fur-header
+>
+  <div class="fur-header__inner">
+
+    <!-- LEFT -->
+    <div class="fur-header__left">
+
+      <!-- MENU -->
+      <button
+        type="button"
+        class="fur-header__text-button"
+        aria-expanded="false"
+        data-fur-menu-toggle
+      >
+        <span class="fur-header__menu-label">
+          {{ section.settings.main_menu_heading | default: 'MENU' }}
+        </span>
+
+        <span
+          class="fur-header__symbol"
+          data-fur-menu-symbol
+        >
+          +
+        </span>
+      </button>
+
+
+      <!-- SHOP ALL -->
+      <a
+        href="{{ routes.all_products_collection_url }}"
+        class="fur-header__link"
+      >
+        {{ section.settings.shop_all_label | default: 'SHOP ALL' }}
+      </a>
+
+
+      <!-- CATEGORIES -->
+      <button
+        type="button"
+        class="fur-header__text-button fur-header__categories-button"
+        aria-expanded="false"
+        data-fur-categories-toggle
+      >
+        <span>
+          {{ section.settings.categories_heading | default: 'CATEGORIES' }}
+        </span>
+
+        <span
+          class="fur-header__symbol"
+          data-fur-categories-symbol
+        >
+          +
+        </span>
+      </button>
+
+
+      {% if section.settings.category_count_text != blank %}
+        <span class="fur-header__category-count">
+          {{ section.settings.category_count_text }}
+        </span>
+      {% endif %}
+
+    </div>
+
+
+    <!-- CENTER -->
+    <div class="fur-header__center">
+
+      <a
+        href="{{ routes.root_url }}"
+        class="fur-header__logo-link"
+      >
+
+        {% if section.settings.logo != blank %}
+
+          {{
+            section.settings.logo
+            | image_url: width: 600
+            | image_tag:
+              class: 'fur-header__logo',
+              widths: '120, 180, 240, 360, 480, 600',
+              loading: 'eager',
+              alt: shop.name
+          }}
+
+        {% else %}
+
+          <span class="fur-header__logo-text">
+            {{ section.settings.logo_text | default: shop.name }}
+          </span>
+
+        {% endif %}
+
+      </a>
+
+    </div>
+
+
+    <!-- RIGHT -->
+    <div class="fur-header__right">
+
+      <!-- BAG -->
+  <a
+    href="{{ routes.cart_url }}"
+    class="fur-header__link"
+    data-fur-cart-toggle
+    aria-label="Open cart"
+  >
+    {{ section.settings.bag_label | default: 'BAG' }}.<span data-fur-header-cart-count>{{ cart.item_count }}</span>
+  </a>
+
+      <!-- SEARCH -->
+      {% if section.settings.show_search %}
+        <button
+          type="button"
+          class="fur-header__text-button"
+          data-fur-search-open
+          aria-label="Open search"
+        >
+          {{ section.settings.search_label | default: 'SEARCH' }}
+        </button>
+      {% endif %}
+
+
+      <!-- FAVORITES -->
+      {% if section.settings.show_favorites %}
+
+        <a
+          href="{{ section.settings.favorites_url | default: '#' }}"
+          class="fur-header__link"
+        >
+          {{ section.settings.favorites_label | default: 'FAVORITES' }}.<span data-fur-favorites-count>0</span>
+        </a>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+</header>
+
+
+{% render 'fur-menu-panel', section: section %}
+
+
+<style>
+  #shopify-section-{{ section.id }} {
+    --fur-header-height: {{ section.settings.desktop_height }}px;
+    --fur-header-padding: {{ section.settings.horizontal_padding }}px;
+    --fur-header-font-size: {{ section.settings.font_size }}px;
+
+    --fur-logo-width: {{ section.settings.desktop_logo_width }}px;
+    --fur-logo-mobile-width: {{ section.settings.mobile_logo_width }}px;
+
+    --fur-header-background: {{ section.settings.background }};
+    --fur-header-text: {{ section.settings.text_color }};
+    --fur-header-border: {{ section.settings.border_color }};
+
+    width: 100%;
+    margin: 0;
+    padding: 0;
+
+    z-index: 10000;
+  }
+
+  {% if section.settings.header_position == 'sticky' %}
+
+    #shopify-section-{{ section.id }} {
+      position: sticky !important;
+      position: -webkit-sticky !important;
+
+      top: 0 !important;
+
+      left: auto !important;
+      right: auto !important;
+
+      z-index: 10000 !important;
+    }
+
+  {% else %}
+
+    {% if section.settings.header_background_style == 'transparent' %}
+
+      #shopify-section-{{ section.id }} {
+        position: absolute !important;
+
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+
+        z-index: 10000 !important;
+      }
+
+    {% else %}
+
+      #shopify-section-{{ section.id }} {
+        position: relative !important;
+
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+
+        z-index: 10000 !important;
+      }
+
+    {% endif %}
+
+  {% endif %}
+</style>
+
+
+{% schema %}
+{
+  "name": "Fur header",
+  "tag": "section",
+  "class": "section-fur-header",
+
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text",
+      "default": "THE FUR"
+    },
+
+    {
+      "type": "range",
+      "id": "desktop_logo_width",
+      "min": 80,
+      "max": 300,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop logo width",
+      "default": 160
+    },
+
+    {
+      "type": "range",
+      "id": "mobile_logo_width",
+      "min": 60,
+      "max": 180,
+      "step": 5,
+      "unit": "px",
+      "label": "Mobile logo width",
+      "default": 100
+    },
+
+
+    {
+      "type": "header",
+      "content": "Header behavior"
+    },
+
+    {
+      "type": "select",
+      "id": "header_background_style",
+      "label": "Header background style",
+      "options": [
+        {
+          "value": "transparent",
+          "label": "Transparent"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        }
+      ],
+      "default": "solid"
+    },
+
+    {
+      "type": "select",
+      "id": "header_position",
+      "label": "Header position",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "sticky",
+          "label": "Sticky on scroll"
+        }
+      ],
+      "default": "sticky"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+
+    {
+      "type": "text",
+      "id": "main_menu_heading",
+      "label": "Menu label",
+      "default": "MENU"
+    },
+
+    {
+      "type": "link_list",
+      "id": "main_menu",
+      "label": "Menu navigation"
+    },
+
+    {
+      "type": "text",
+      "id": "shop_all_label",
+      "label": "Shop all label",
+      "default": "SHOP ALL"
+    },
+
+    {
+      "type": "text",
+      "id": "categories_heading",
+      "label": "Categories label",
+      "default": "CATEGORIES"
+    },
+
+    {
+      "type": "link_list",
+      "id": "categories_menu",
+      "label": "Categories navigation"
+    },
+
+    {
+      "type": "text",
+      "id": "category_count_text",
+      "label": "Small category text",
+      "default": "[ 5-HIT ]"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Right navigation"
+    },
+
+    {
+      "type": "text",
+      "id": "bag_label",
+      "label": "Bag label",
+      "default": "BAG"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "label": "Show search",
+      "default": true
+    },
+
+    {
+      "type": "text",
+      "id": "search_label",
+      "label": "Search label",
+      "default": "SEARCH"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_favorites",
+      "label": "Show favorites",
+      "default": true
+    },
+
+    {
+      "type": "text",
+      "id": "favorites_label",
+      "label": "Favorites label",
+      "default": "FAVORITES"
+    },
+
+    {
+      "type": "url",
+      "id": "favorites_url",
+      "label": "Favorites link"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Opened menu"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "menu_image",
+      "label": "Opened menu image"
+    },
+
+    {
+      "type": "text",
+      "id": "menu_bottom_text",
+      "label": "Menu bottom text",
+      "default": "THE FUR"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Menu footer"
+    },
+
+    {
+      "type": "text",
+      "id": "menu_footer_left",
+      "label": "Footer left",
+      "default": "SHIPPING AND PAYMENT"
+    },
+
+    {
+      "type": "text",
+      "id": "menu_footer_center",
+      "label": "Footer center",
+      "default": "CREDITS"
+    },
+
+    {
+      "type": "text",
+      "id": "menu_footer_right",
+      "label": "Footer right",
+      "default": "TERMS AND CONDITIONS"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+
+    {
+      "type": "range",
+      "id": "desktop_height",
+      "min": 90,
+      "max": 220,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop header height",
+      "default": 136
+    },
+
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "min": 10,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop horizontal padding",
+      "default": 32
+    },
+
+
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 9,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Menu font size",
+      "default": 11
+    },
+
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#f7f7f5"
+    },
+
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#111111"
+    },
+
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Top border",
+      "default": "#d8d4cc"
+    }
+
+  ],
+
+  "presets": [
+    {
+      "name": "Fur header"
+    }
+  ]
+}
+{% endschema %}

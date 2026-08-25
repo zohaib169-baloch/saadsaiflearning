@@ -1,0 +1,1122 @@
+{{ 'fur-product.css' | asset_url | stylesheet_tag }}
+
+<script
+  src="{{ 'fur-product.js' | asset_url }}"
+  defer
+></script>
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign product_form_id = 'FurProductForm-' | append: section.id
+-%}
+
+<section
+  id="FurProduct-{{ section.id }}"
+  class="fur-product"
+  data-fur-product
+  style="
+    --fur-product-gallery-width: {{ section.settings.gallery_width }}%;
+    --fur-product-info-width: {{ 100 | minus: section.settings.gallery_width }}%;
+
+    --fur-product-left-label-width: {{ section.settings.left_label_width }}px;
+    --fur-product-media-max-width: {{ section.settings.media_max_width }}px;
+    --fur-product-media-height: {{ section.settings.media_height }}vh;
+    --fur-product-media-gap: {{ section.settings.media_gap }}px;
+
+    --fur-product-column-gap: {{ section.settings.column_gap }}px;
+
+    --fur-product-padding-x: {{ section.settings.padding_horizontal }}px;
+    --fur-product-padding-top: {{ section.settings.padding_top }}px;
+    --fur-product-padding-bottom: {{ section.settings.padding_bottom }}px;
+
+    --fur-product-sticky-top: {{ section.settings.sticky_top }}px;
+
+    --fur-product-title-size: {{ section.settings.title_size }}px;
+    --fur-product-price-size: {{ section.settings.price_size }}px;
+
+    --fur-product-image-background: {{ section.settings.image_background }};
+    --fur-product-background: {{ section.settings.background_color }};
+    --fur-product-text: {{ section.settings.text_color }};
+
+    --fur-product-label-size: {{ section.settings.left_label_size }}px;
+  "
+>
+
+  <div class="fur-product__layout">
+
+
+    <!-- =====================================================
+         LEFT SIDE
+    ====================================================== -->
+
+    <div class="fur-product__gallery-column">
+
+
+      <!-- ===============================================
+           EDITORIAL LABELS
+      ================================================ -->
+
+      <aside
+        class="fur-product__editorial-labels"
+        aria-hidden="true"
+      >
+
+        <div class="fur-product__editorial-labels-inner">
+
+          {% if section.settings.left_label_1 != blank %}
+
+            <span
+              class="
+                fur-product__editorial-label
+                fur-product__editorial-label--top
+              "
+            >
+              {{ section.settings.left_label_1 }}
+            </span>
+
+          {% endif %}
+
+
+          {% if section.settings.left_label_2 != blank %}
+
+            <span
+              class="
+                fur-product__editorial-label
+                fur-product__editorial-label--middle
+              "
+            >
+              {{ section.settings.left_label_2 }}
+            </span>
+
+          {% endif %}
+
+
+          {% if section.settings.left_label_3 != blank %}
+
+            <span
+              class="
+                fur-product__editorial-label
+                fur-product__editorial-label--bottom
+              "
+            >
+              {{ section.settings.left_label_3 }}
+            </span>
+
+          {% endif %}
+
+        </div>
+
+      </aside>
+
+
+      <!-- ===============================================
+           PRODUCT GALLERY
+      ================================================ -->
+
+      <div
+        class="fur-product__gallery"
+        data-fur-product-gallery
+      >
+
+        {% if product.media.size > 0 %}
+
+          {% for media in product.media %}
+
+            <div
+              class="fur-product__media"
+              data-fur-product-media
+              data-media-id="{{ media.id }}"
+            >
+
+              <div class="fur-product__media-inner">
+
+                {% case media.media_type %}
+
+
+                  {% when 'image' %}
+
+                    {{
+                      media.preview_image
+                      | image_url: width: 2200
+                      | image_tag:
+                        class: 'fur-product__image',
+                        loading: 'lazy',
+                        widths: '500, 700, 900, 1200, 1500, 1800, 2200',
+                        sizes: '(min-width: 990px) 52vw, 100vw',
+                        alt: media.alt | default: product.title
+                    }}
+
+
+                  {% when 'video' %}
+
+                    {{
+                      media
+                      | video_tag:
+                        class: 'fur-product__video',
+                        controls: true,
+                        autoplay: false,
+                        loop: false,
+                        muted: true
+                    }}
+
+
+                  {% when 'external_video' %}
+
+                    {{
+                      media
+                      | external_video_tag:
+                        class: 'fur-product__video'
+                    }}
+
+
+                  {% when 'model' %}
+
+                    {{
+                      media
+                      | model_viewer_tag:
+                        class: 'fur-product__model',
+                        reveal: 'interaction',
+                        toggleable: true
+                    }}
+
+                {% endcase %}
+
+              </div>
+
+            </div>
+
+          {% endfor %}
+
+
+        {% else %}
+
+          <div class="fur-product__media">
+
+            <div class="fur-product__media-inner">
+
+              {{
+                'product-1'
+                | placeholder_svg_tag: 'fur-product__placeholder'
+              }}
+
+            </div>
+
+          </div>
+
+        {% endif %}
+
+      </div>
+
+
+      <!-- ===============================================
+           MOBILE SLIDER DOTS
+      ================================================ -->
+
+      {% if product.media.size > 1 %}
+
+        <div
+          class="fur-product__mobile-dots"
+          data-fur-mobile-dots
+          aria-label="Product media navigation"
+        >
+
+          {% for media in product.media %}
+
+            <button
+              type="button"
+              class="
+                fur-product__mobile-dot
+                {% if forloop.first %}
+                  is-active
+                {% endif %}
+              "
+              data-fur-mobile-dot
+              data-slide-index="{{ forloop.index0 }}"
+              aria-label="View product media {{ forloop.index }}"
+            ></button>
+
+          {% endfor %}
+
+        </div>
+
+      {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         RIGHT SIDE
+    ====================================================== -->
+
+    <div class="fur-product__information-column">
+
+      <div class="fur-product__information">
+
+
+        <!-- ===============================================
+             TOP PRODUCT INFORMATION
+        ================================================ -->
+
+        <div class="fur-product__information-top">
+
+
+          <!-- PRODUCT TITLE -->
+
+          <div class="fur-product__title-row">
+
+            <h1 class="fur-product__title">
+              {{ product.title }}
+            </h1>
+
+          </div>
+
+
+          <!-- =============================================
+               PURCHASE AREA
+          ============================================== -->
+
+          <div
+            class="fur-product__purchase"
+            data-fur-product-purchase
+            data-product-url="{{ product.url }}"
+            data-low-stock-threshold="{{ section.settings.low_stock_threshold }}"
+            data-add-text="{{ section.settings.add_to_cart_text | escape }}"
+          >
+
+            {% form 'product',
+              product,
+              id: product_form_id,
+              class: 'fur-product__form',
+              novalidate: 'novalidate'
+            %}
+
+
+              <!-- CURRENT VARIANT -->
+
+              <input
+                type="hidden"
+                name="id"
+                value="{{ current_variant.id }}"
+                data-fur-variant-id
+              >
+
+
+              <!-- =========================================
+                   PRICE
+              ========================================== -->
+
+              <div
+                class="fur-product__dynamic-price"
+                data-fur-price
+              >
+
+                {% if current_variant.compare_at_price > current_variant.price %}
+
+                  <span
+                    class="
+                      fur-product__price-current
+                      fur-product__price-current--sale
+                    "
+                  >
+                    {{ current_variant.price | money }}
+                  </span>
+
+                  <s class="fur-product__price-compare">
+                    {{ current_variant.compare_at_price | money }}
+                  </s>
+
+                {% else %}
+
+                  <span class="fur-product__price-current">
+                    {{ current_variant.price | money }}
+                  </span>
+
+                {% endif %}
+
+              </div>
+
+
+              <!-- =========================================
+                   PRODUCT OPTIONS
+              ========================================== -->
+
+              {% unless product.has_only_default_variant %}
+
+                <div class="fur-product__options">
+
+                  {% for option in product.options_with_values %}
+
+                    <fieldset
+                      class="fur-product__option-group"
+                      data-fur-option
+                      data-option-position="{{ option.position }}"
+                    >
+
+                      <legend class="fur-product__option-heading">
+
+                        <span>
+                          SELECT {{ option.name | upcase }}:
+                        </span>
+
+                        <span
+                          class="fur-product__selected-option"
+                          data-fur-selected-option
+                        >
+                          {{ option.selected_value }}
+                        </span>
+
+                      </legend>
+
+
+                      <div class="fur-product__option-values">
+
+                        {% for value in option.values %}
+
+                          {%- liquid
+                            assign input_id = 'FurOption-' | append: section.id | append: '-' | append: option.position | append: '-' | append: forloop.index
+                          -%}
+
+                          <input
+                            type="radio"
+                            id="{{ input_id }}"
+                            name="options[{{ option.name | escape }}]"
+                            value="{{ value | escape }}"
+                            class="fur-product__option-input"
+                            data-fur-option-input
+                            data-option-position="{{ option.position }}"
+                            {% if option.selected_value == value %}
+                              checked
+                            {% endif %}
+                          >
+
+                          <label
+                            for="{{ input_id }}"
+                            class="fur-product__option-value"
+                          >
+
+                            <span data-fur-stretch-link>
+                              {{ value }}
+                            </span>
+
+                          </label>
+
+                        {% endfor %}
+
+                      </div>
+
+                    </fieldset>
+
+                  {% endfor %}
+
+                </div>
+
+              {% endunless %}
+
+
+              <!-- =========================================
+                   INVENTORY
+              ========================================== -->
+
+              {% if section.settings.show_inventory %}
+
+                <div
+                  class="
+                    fur-product__inventory
+
+                    {% if current_variant.available == false %}
+                      is-sold-out
+                    {% elsif current_variant.inventory_management != blank
+                      and current_variant.inventory_quantity > 0
+                      and current_variant.inventory_quantity <= section.settings.low_stock_threshold
+                    %}
+                      is-low-stock
+                    {% endif %}
+                  "
+                  data-fur-inventory
+                >
+
+                  <span
+                    class="fur-product__inventory-dot"
+                    data-fur-inventory-dot
+                  ></span>
+
+
+                  <span data-fur-inventory-text>
+
+                    {% if current_variant.available %}
+
+                      {% if current_variant.inventory_management != blank
+                        and current_variant.inventory_quantity > 0
+                        and current_variant.inventory_quantity <= section.settings.low_stock_threshold
+                      %}
+
+                        {{ current_variant.inventory_quantity }}
+                        ITEMS LEFT
+
+                      {% else %}
+
+                        IN STOCK
+
+                      {% endif %}
+
+                    {% else %}
+
+                      SOLD OUT
+
+                    {% endif %}
+
+                  </span>
+
+                </div>
+
+              {% endif %}
+
+
+              <!-- =========================================
+                   ADD TO BAG
+              ========================================== -->
+
+              <button
+                type="submit"
+                name="add"
+                class="fur-product__add-button"
+                data-fur-add-button
+                {% unless current_variant.available %}
+                  disabled
+                {% endunless %}
+              >
+
+                <span class="fur-product__add-button-bracket">
+                  [
+                </span>
+
+
+                <span
+                  class="fur-product__add-button-text"
+                  data-fur-add-button-text
+                  data-fur-stretch-link
+                >
+
+                  {% if current_variant.available %}
+
+                    {{ section.settings.add_to_cart_text }}
+
+                  {% else %}
+
+                    SOLD OUT
+
+                  {% endif %}
+
+                </span>
+
+
+                <span class="fur-product__add-button-bracket">
+                  ]
+                </span>
+
+              </button>
+
+
+              <!-- FORM MESSAGE -->
+
+              <div
+                class="fur-product__form-message"
+                data-fur-form-message
+                role="status"
+                hidden
+              ></div>
+
+            {% endform %}
+
+
+            <!-- =========================================
+                 VARIANT JSON
+            ========================================== -->
+
+            <script
+              type="application/json"
+              data-fur-product-json
+            >
+              [
+                {% for variant in product.variants %}
+                  {
+                    "id": {{ variant.id | json }},
+                    "available": {{ variant.available | json }},
+                    "price": {{ variant.price | json }},
+                    "compare_at_price": {{ variant.compare_at_price | json }},
+                    "options": {{ variant.options | json }},
+
+                    "featured_media_id":
+                      {% if variant.featured_media %}
+                        {{ variant.featured_media.id | json }}
+                      {% else %}
+                        null
+                      {% endif %},
+
+                    "inventory_management":
+                      {{ variant.inventory_management | json }},
+
+                    "inventory_quantity":
+                      {{ variant.inventory_quantity | json }}
+                  }{% unless forloop.last %},{% endunless %}
+                {% endfor %}
+              ]
+            </script>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             MANUAL PRODUCT INFORMATION BLOCKS
+        ================================================== -->
+
+        {% if section.blocks.size > 0 %}
+
+          <div
+            class="fur-product__information-bottom"
+            data-fur-product-blocks
+          >
+
+            {% for block in section.blocks %}
+
+              {% case block.type %}
+
+
+                <!-- =======================================
+                     ACCORDION
+                ======================================== -->
+
+                {% when 'accordion' %}
+
+                  <details
+                    class="fur-product__accordion"
+                    {{ block.shopify_attributes }}
+                    {% if block.settings.open_by_default %}
+                      open
+                    {% endif %}
+                  >
+
+                    <summary class="fur-product__accordion-summary">
+
+                      <span class="fur-product__accordion-heading">
+
+                        {% if block.settings.number != blank %}
+
+                          <span class="fur-product__accordion-number">
+                            {{ block.settings.number }}.
+                          </span>
+
+                        {% endif %}
+
+
+                        <span data-fur-stretch-link>
+                          {{ block.settings.heading }}
+                        </span>
+
+                      </span>
+
+
+                      <span
+                        class="fur-product__accordion-symbol"
+                        aria-hidden="true"
+                      >
+                        +
+                      </span>
+
+                    </summary>
+
+
+                    <div class="fur-product__accordion-content">
+
+                      {% if block.settings.use_product_description %}
+
+                        {{ product.description }}
+
+                      {% else %}
+
+                        {{ block.settings.content }}
+
+                      {% endif %}
+
+                    </div>
+
+                  </details>
+
+
+                <!-- =======================================
+                     TEXT BLOCK
+                ======================================== -->
+
+                {% when 'text' %}
+
+                  <div
+                    class="fur-product__content-block"
+                    {{ block.shopify_attributes }}
+                  >
+
+                    {% if block.settings.heading != blank %}
+
+                      <div class="fur-product__content-block-heading">
+
+                        {% if block.settings.number != blank %}
+
+                          <span class="fur-product__content-block-number">
+                            {{ block.settings.number }}.
+                          </span>
+
+                        {% endif %}
+
+
+                        <span data-fur-stretch-link>
+                          {{ block.settings.heading }}
+                        </span>
+
+                      </div>
+
+                    {% endif %}
+
+
+                    {% if block.settings.content != blank %}
+
+                      <div class="fur-product__content-block-content">
+                        {{ block.settings.content }}
+                      </div>
+
+                    {% endif %}
+
+                  </div>
+
+              {% endcase %}
+
+            {% endfor %}
+
+          </div>
+
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       PRODUCT ZOOM OVERLAY
+  ====================================================== -->
+
+  <div
+    class="fur-product__zoom-overlay"
+    data-fur-zoom-overlay
+    aria-hidden="true"
+  >
+
+    <div
+      class="fur-product__zoom-media"
+      data-fur-zoom-media
+    ></div>
+
+  </div>
+
+
+  <!-- =====================================================
+       ZOOM / CLOSE CURSOR
+  ====================================================== -->
+
+  <div
+    class="fur-product__hover-cursor"
+    data-fur-hover-cursor
+    aria-hidden="true"
+  >
+
+    <span data-fur-hover-cursor-text>
+      ZOOM
+    </span>
+
+  </div>
+
+</section>
+
+
+{% schema %}
+{
+  "name": "Fur main product",
+
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "Desktop layout"
+    },
+
+    {
+      "type": "range",
+      "id": "gallery_width",
+      "min": 50,
+      "max": 75,
+      "step": 1,
+      "unit": "%",
+      "label": "Gallery side width",
+      "default": 59
+    },
+
+    {
+      "type": "range",
+      "id": "left_label_width",
+      "min": 80,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Left labels width",
+      "default": 190
+    },
+
+    {
+      "type": "range",
+      "id": "column_gap",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Main column gap",
+      "default": 16
+    },
+
+    {
+      "type": "range",
+      "id": "sticky_top",
+      "min": 0,
+      "max": 180,
+      "step": 2,
+      "unit": "px",
+      "label": "Sticky top offset",
+      "default": 0
+    },
+
+
+    {
+      "type": "header",
+      "content": "Editorial left labels"
+    },
+
+    {
+      "type": "text",
+      "id": "left_label_1",
+      "label": "Top label",
+      "default": "(UA)"
+    },
+
+    {
+      "type": "text",
+      "id": "left_label_2",
+      "label": "Middle label",
+      "default": "(DE)"
+    },
+
+    {
+      "type": "text",
+      "id": "left_label_3",
+      "label": "Bottom label",
+      "default": "(NEW ORDER)"
+    },
+
+    {
+      "type": "range",
+      "id": "left_label_size",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Left label size",
+      "default": 11
+    },
+
+
+    {
+      "type": "header",
+      "content": "Product media"
+    },
+
+    {
+      "type": "range",
+      "id": "media_max_width",
+      "min": 300,
+      "max": 900,
+      "step": 20,
+      "unit": "px",
+      "label": "Media maximum width",
+      "default": 520
+    },
+
+    {
+      "type": "range",
+      "id": "media_height",
+      "min": 60,
+      "max": 100,
+      "step": 2,
+      "unit": "vh",
+      "label": "Desktop media height",
+      "default": 92
+    },
+
+    {
+      "type": "range",
+      "id": "media_gap",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Space between product media",
+      "default": 8
+    },
+
+    {
+      "type": "color",
+      "id": "image_background",
+      "label": "Image background",
+      "default": "#ffffff"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Product information"
+    },
+
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 20,
+      "max": 70,
+      "step": 2,
+      "unit": "px",
+      "label": "Product title size",
+      "default": 36
+    },
+
+    {
+      "type": "range",
+      "id": "price_size",
+      "min": 12,
+      "max": 34,
+      "step": 1,
+      "unit": "px",
+      "label": "Price size",
+      "default": 18
+    },
+
+
+    {
+      "type": "header",
+      "content": "Inventory"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_inventory",
+      "label": "Show inventory",
+      "default": true
+    },
+
+    {
+      "type": "range",
+      "id": "low_stock_threshold",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "label": "Low stock threshold",
+      "default": 5
+    },
+
+
+    {
+      "type": "header",
+      "content": "Add to bag"
+    },
+
+    {
+      "type": "text",
+      "id": "add_to_cart_text",
+      "label": "Add to bag text",
+      "default": "ADD TO BAG"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Page background",
+      "default": "#fbf6f3"
+    },
+
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#111111"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 0
+    },
+
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 0
+    },
+
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 0
+    }
+
+  ],
+
+
+  "blocks": [
+
+    {
+      "type": "accordion",
+      "name": "Accordion",
+
+      "settings": [
+
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "01"
+        },
+
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "DETAILS"
+        },
+
+        {
+          "type": "checkbox",
+          "id": "use_product_description",
+          "label": "Use product description",
+          "default": false,
+          "info": "When enabled, this block displays the current product description instead of the custom content below."
+        },
+
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Add your content here.</p>"
+        },
+
+        {
+          "type": "checkbox",
+          "id": "open_by_default",
+          "label": "Open by default",
+          "default": false
+        }
+
+      ]
+    },
+
+
+    {
+      "type": "text",
+      "name": "Text block",
+
+      "settings": [
+
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number"
+        },
+
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "INFORMATION"
+        },
+
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Add your content here.</p>"
+        }
+
+      ]
+    }
+
+  ],
+
+
+  "presets": [
+
+    {
+      "name": "Fur main product",
+
+      "blocks": [
+
+        {
+          "type": "accordion",
+
+          "settings": {
+            "number": "01",
+            "heading": "DETAILS",
+            "use_product_description": true,
+            "open_by_default": false
+          }
+        },
+
+        {
+          "type": "accordion",
+
+          "settings": {
+            "number": "02",
+            "heading": "CARE",
+            "use_product_description": false,
+            "open_by_default": false
+          }
+        }
+
+      ]
+    }
+
+  ]
+}
+{% endschema %}

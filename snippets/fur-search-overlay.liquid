@@ -1,0 +1,469 @@
+{% comment %}
+  THE FUR — FULL SCREEN SEARCH OVERLAY
+
+  Features:
+  - Opens from header search trigger
+  - Full-screen overlay
+  - Large black search header
+  - Predictive search result container
+  - Popular products shown before searching
+  - No-results state with popular products fallback
+  - Uses existing fur-product-card snippet
+  - Desktop + mobile responsive via CSS
+{% endcomment %}
+
+{{ 'fur-product-card.css' | asset_url | stylesheet_tag }}
+{{ 'fur-search-overlay.css' | asset_url | stylesheet_tag }}
+
+<script
+  src="{{ 'fur-product-card.js' | asset_url }}"
+  defer
+></script>
+
+<script
+  src="{{ 'fur-search-overlay.js' | asset_url }}"
+  defer
+></script>
+
+
+<div
+  class="fur-search-overlay"
+  data-fur-search-overlay
+  aria-hidden="true"
+
+  style="
+    --fur-search-background:
+      {{ settings.search_overlay_background | default: '#fbf6f3' }};
+
+    --fur-search-header-background:
+      {{ settings.search_overlay_header_background | default: '#000000' }};
+
+    --fur-search-text:
+      {{ settings.search_overlay_text_color | default: '#111111' }};
+
+    --fur-search-header-text:
+      {{ settings.search_overlay_header_text_color | default: '#ffffff' }};
+
+    --fur-search-accent:
+      {{ settings.search_overlay_accent_color | default: '#ff2e2e' }};
+  "
+>
+
+
+  <!-- =====================================================
+       INNER
+  ====================================================== -->
+
+  <div
+    class="fur-search-overlay__inner"
+    data-fur-search-inner
+  >
+
+
+    <!-- ===================================================
+         BLACK SEARCH HEADER
+    ==================================================== -->
+
+    <div class="fur-search-overlay__header">
+
+
+      <!-- ===============================================
+           SEARCH FORM
+      ================================================ -->
+
+      <form
+        action="{{ routes.search_url }}"
+        method="get"
+        role="search"
+        class="fur-search-overlay__form"
+        data-fur-search-form
+      >
+
+        <input
+          type="hidden"
+          name="type"
+          value="product"
+        >
+
+
+        <label
+          for="FurSearchOverlayInput"
+          class="fur-visually-hidden"
+        >
+          Search products
+        </label>
+
+
+        <input
+          id="FurSearchOverlayInput"
+          class="fur-search-overlay__input"
+          type="search"
+          name="q"
+          value=""
+          placeholder="SEARCH"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          data-fur-search-input
+        >
+
+
+        <!-- =============================================
+             CLOSE
+        ============================================== -->
+
+        <button
+          type="button"
+          class="fur-search-overlay__close"
+          aria-label="Close search"
+          data-fur-search-close
+        >
+          <span aria-hidden="true">
+            ×
+          </span>
+        </button>
+
+      </form>
+
+    </div>
+
+
+    <!-- ===================================================
+         SEARCH CONTENT
+    ==================================================== -->
+
+    <div
+      class="fur-search-overlay__content"
+      data-fur-search-content
+    >
+
+
+      <!-- =================================================
+           INITIAL / POPULAR PRODUCTS STATE
+      ================================================== -->
+
+      <div
+        class="fur-search-overlay__state fur-search-overlay__state--initial is-active"
+        data-fur-search-initial
+      >
+
+
+        <!-- =============================================
+             INITIAL INTRO AREA
+        ============================================== -->
+
+        <div class="fur-search-overlay__intro">
+
+          <div class="fur-search-overlay__intro-label">
+            SEARCH
+          </div>
+
+        </div>
+
+
+        <!-- =============================================
+             POPULAR PRODUCTS
+        ============================================== -->
+
+        <div class="fur-search-overlay__popular">
+
+
+          <div class="fur-search-overlay__popular-sidebar">
+
+            <h2 class="fur-search-overlay__popular-heading">
+              POPULAR PRODUCTS
+            </h2>
+
+
+            {% if settings.search_overlay_side_text_1 != blank %}
+
+              <div class="fur-search-overlay__side-text">
+                {{ settings.search_overlay_side_text_1 }}
+              </div>
+
+            {% endif %}
+
+
+            {% if settings.search_overlay_side_text_2 != blank %}
+
+              <div class="fur-search-overlay__side-text">
+                {{ settings.search_overlay_side_text_2 }}
+              </div>
+
+            {% endif %}
+
+          </div>
+
+
+          <div
+            class="fur-search-overlay__products-grid"
+            data-fur-search-popular-grid
+          >
+
+            {% assign popular_collection = settings.search_overlay_popular_collection %}
+
+            {% if popular_collection != blank %}
+
+              {% assign popular_limit = settings.search_overlay_popular_limit | default: 5 %}
+
+
+              {% for product in popular_collection.products limit: popular_limit %}
+
+                {% render 'fur-product-card',
+                  product: product,
+                  image_ratio: settings.search_overlay_image_ratio,
+                  show_compare_price: settings.search_overlay_show_compare_price,
+                  show_badges: settings.search_overlay_show_badges,
+                  badge_tag: settings.search_overlay_badge_tag,
+                  custom_badge: settings.search_overlay_custom_badge,
+                  sale_badge: settings.search_overlay_sale_badge,
+                  sold_out_badge: settings.search_overlay_sold_out_badge,
+                  option_name: settings.search_overlay_option_name,
+                  hover_fallback_text: 'VIEW PRODUCT'
+                %}
+
+              {% endfor %}
+
+
+            {% else %}
+
+              {% for product in collections.all.products limit: 5 %}
+
+                {% render 'fur-product-card',
+                  product: product,
+                  image_ratio: 'portrait',
+                  show_compare_price: true,
+                  show_badges: true,
+                  sale_badge: 'SALE',
+                  sold_out_badge: 'SOLD OUT',
+                  hover_fallback_text: 'VIEW PRODUCT'
+                %}
+
+              {% endfor %}
+
+            {% endif %}
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           RESULTS STATE
+      ================================================== -->
+
+      <div
+        class="fur-search-overlay__state fur-search-overlay__state--results"
+        data-fur-search-results-state
+      >
+
+
+        <!-- =============================================
+             RESULTS HEADER
+        ============================================== -->
+
+        <div class="fur-search-overlay__results-header">
+
+
+          <span class="fur-search-overlay__results-label">
+            SEARCH
+          </span>
+
+
+          <div
+            class="fur-search-overlay__results-count"
+            data-fur-search-results-count
+          >
+          </div>
+
+        </div>
+
+
+        <!-- =============================================
+             RESULTS GRID
+
+             JS inserts predictive search products here.
+        ============================================== -->
+
+        <div
+          class="fur-search-overlay__results-grid"
+          data-fur-search-results-grid
+        >
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           NO RESULTS STATE
+      ================================================== -->
+
+      <div
+        class="fur-search-overlay__state fur-search-overlay__state--empty"
+        data-fur-search-empty-state
+      >
+
+
+        <!-- =============================================
+             EMPTY HEADER
+        ============================================== -->
+
+        <div class="fur-search-overlay__empty-header">
+
+
+          <span class="fur-search-overlay__empty-label">
+            SEARCH
+          </span>
+
+
+          <div
+            class="fur-search-overlay__empty-count"
+            data-fur-search-empty-count
+          >
+          </div>
+
+        </div>
+
+
+        <!-- =============================================
+             EMPTY MESSAGE
+        ============================================== -->
+
+        <div class="fur-search-overlay__empty-message">
+
+
+          <div class="fur-search-overlay__empty-title">
+            NOTHING MATCHES YOUR SEARCH
+          </div>
+
+
+          <div class="fur-search-overlay__empty-help">
+
+            BUT
+
+            <strong>
+              DON'T GIVE UP
+            </strong>
+
+            - CHECK THE SPELLING OR
+            <br>
+
+            TRY LESS SPECIFIC
+
+            <strong>
+              SEARCH
+            </strong>
+
+            TERMS.
+
+          </div>
+
+        </div>
+
+
+        <!-- =============================================
+             POPULAR PRODUCTS FALLBACK
+        ============================================== -->
+
+        <div class="fur-search-overlay__popular">
+
+
+          <div class="fur-search-overlay__popular-sidebar">
+
+            <h2 class="fur-search-overlay__popular-heading">
+              POPULAR PRODUCTS
+            </h2>
+
+
+            {% if settings.search_overlay_side_text_1 != blank %}
+
+              <div class="fur-search-overlay__side-text">
+                {{ settings.search_overlay_side_text_1 }}
+              </div>
+
+            {% endif %}
+
+
+            {% if settings.search_overlay_side_text_2 != blank %}
+
+              <div class="fur-search-overlay__side-text">
+                {{ settings.search_overlay_side_text_2 }}
+              </div>
+
+            {% endif %}
+
+          </div>
+
+
+          <div class="fur-search-overlay__products-grid">
+
+            {% assign popular_collection = settings.search_overlay_popular_collection %}
+
+            {% if popular_collection != blank %}
+
+              {% assign popular_limit = settings.search_overlay_popular_limit | default: 5 %}
+
+
+              {% for product in popular_collection.products limit: popular_limit %}
+
+                {% render 'fur-product-card',
+                  product: product,
+                  image_ratio: settings.search_overlay_image_ratio,
+                  show_compare_price: settings.search_overlay_show_compare_price,
+                  show_badges: settings.search_overlay_show_badges,
+                  badge_tag: settings.search_overlay_badge_tag,
+                  custom_badge: settings.search_overlay_custom_badge,
+                  sale_badge: settings.search_overlay_sale_badge,
+                  sold_out_badge: settings.search_overlay_sold_out_badge,
+                  option_name: settings.search_overlay_option_name,
+                  hover_fallback_text: 'VIEW PRODUCT'
+                %}
+
+              {% endfor %}
+
+
+            {% else %}
+
+              {% for product in collections.all.products limit: 5 %}
+
+                {% render 'fur-product-card',
+                  product: product,
+                  image_ratio: 'portrait',
+                  show_compare_price: true,
+                  show_badges: true,
+                  sale_badge: 'SALE',
+                  sold_out_badge: 'SOLD OUT',
+                  hover_fallback_text: 'VIEW PRODUCT'
+                %}
+
+              {% endfor %}
+
+            {% endif %}
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           LOADING STATE
+      ================================================== -->
+
+      <div
+        class="fur-search-overlay__loading"
+        data-fur-search-loading
+        aria-hidden="true"
+      >
+        SEARCHING...
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,307 @@
+{% comment %}
+  THE FUR — PRODUCT CARD
+
+  - Uses first 3 product images
+  - Image 1 visible initially
+  - Hover anywhere on card starts slider
+  - Image 1 slides to Image 2
+  - Image 2 immediately slides to Image 3
+  - Stops on Image 3
+  - Mouse leave resets to Image 1
+  - 1 image = static
+  - 2 images = Image 1 → Image 2
+  - Desktop hover only
+  - Mobile always shows Image 1
+{% endcomment %}
+
+
+{%- liquid
+
+  assign image_1 = blank
+  assign image_2 = blank
+  assign image_3 = blank
+
+
+  if product.images.size > 0
+    assign image_1 = product.images[0]
+  endif
+
+
+  if product.images.size > 1
+    assign image_2 = product.images[1]
+  endif
+
+
+  if product.images.size > 2
+    assign image_3 = product.images[2]
+  endif
+
+
+  assign card_image_count = product.images.size
+
+  if card_image_count > 3
+    assign card_image_count = 3
+  endif
+
+
+  assign product_badge = blank
+  assign product_badge_type = blank
+
+
+  if show_badges
+
+    if product.available == false
+
+      assign product_badge = sold_out_badge | default: 'SOLD OUT'
+      assign product_badge_type = 'sold-out'
+
+    elsif product.compare_at_price_max > product.price
+
+      assign product_badge = sale_badge | default: 'SALE'
+      assign product_badge_type = 'sale'
+
+    elsif badge_tag != blank and product.tags contains badge_tag
+
+      assign product_badge = custom_badge | default: badge_tag
+      assign product_badge_type = 'custom'
+
+    endif
+
+  endif
+
+
+  assign option_to_show = blank
+
+
+  if option_name != blank
+
+    for option in product.options_with_values
+
+      if option.name == option_name
+
+        assign option_to_show = option
+        break
+
+      endif
+
+    endfor
+
+  endif
+
+
+  if option_to_show == blank
+    assign option_to_show = product.options_with_values.first
+  endif
+
+-%}
+
+
+<article
+  class="fur-product-card"
+  data-fur-product-card
+  data-fur-product-images="{{ card_image_count }}"
+>
+
+  <a
+    href="{{ product.url }}"
+    class="fur-product-card__link"
+    aria-label="{{ product.title | escape }}"
+  >
+
+
+    <!-- ===================================================
+         PRODUCT MEDIA
+    ==================================================== -->
+
+    <div
+      class="
+        fur-product-card__media
+        fur-product-card__media--{{ image_ratio | default: 'portrait' }}
+      "
+      data-product-card-media
+
+      {% if image_ratio == 'adapt' and image_1 != blank %}
+        style="
+          --fur-product-card-ratio:
+          {{ image_1.aspect_ratio }};
+        "
+      {% endif %}
+    >
+
+
+      <!-- ===============================================
+           IMAGE 1
+      ================================================ -->
+
+      {% if image_1 != blank %}
+
+        {{
+          image_1
+          | image_url: width: 1600
+          | image_tag:
+            class: 'fur-product-card__image fur-product-card__image--slide is-active',
+            loading: 'lazy',
+            widths: '320, 480, 640, 800, 1000, 1200, 1400, 1600',
+            sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw',
+            alt: product.title,
+            data-product-card-image: '0'
+        }}
+
+      {% else %}
+
+        {{
+          'product-1'
+          | placeholder_svg_tag:
+            'fur-product-card__placeholder'
+        }}
+
+      {% endif %}
+
+
+      <!-- ===============================================
+           IMAGE 2
+      ================================================ -->
+
+      {% if image_2 != blank %}
+
+        {{
+          image_2
+          | image_url: width: 1600
+          | image_tag:
+            class: 'fur-product-card__image fur-product-card__image--slide',
+            loading: 'lazy',
+            widths: '320, 480, 640, 800, 1000, 1200, 1400, 1600',
+            sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw',
+            alt: product.title,
+            data-product-card-image: '1'
+        }}
+
+      {% endif %}
+
+
+      <!-- ===============================================
+           IMAGE 3
+      ================================================ -->
+
+      {% if image_3 != blank %}
+
+        {{
+          image_3
+          | image_url: width: 1600
+          | image_tag:
+            class: 'fur-product-card__image fur-product-card__image--slide',
+            loading: 'lazy',
+            widths: '320, 480, 640, 800, 1000, 1200, 1400, 1600',
+            sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw',
+            alt: product.title,
+            data-product-card-image: '2'
+        }}
+
+      {% endif %}
+
+
+      <!-- ===============================================
+           BADGE
+      ================================================ -->
+
+      {% if product_badge != blank %}
+
+        <span
+          class="
+            fur-product-card__badge
+            fur-product-card__badge--{{ product_badge_type }}
+          "
+        >
+          {{ product_badge }}
+        </span>
+
+      {% endif %}
+
+    </div>
+
+
+    <!-- ===================================================
+         PRODUCT INFORMATION
+    ==================================================== -->
+
+    <div class="fur-product-card__information">
+
+
+      <!-- ===============================================
+           DEFAULT INFORMATION
+      ================================================ -->
+
+      <div class="fur-product-card__default-information">
+
+        <h3 class="fur-product-card__title">
+          {{ product.title }}
+        </h3>
+
+
+        <div class="fur-product-card__price">
+
+          {% if product.compare_at_price_max > product.price %}
+
+            <span class="fur-product-card__sale-price">
+              {{ product.price | money }}
+            </span>
+
+
+            {% if show_compare_price %}
+
+              <s class="fur-product-card__compare-price">
+                {{ product.compare_at_price_max | money }}
+              </s>
+
+            {% endif %}
+
+
+          {% else %}
+
+            <span class="fur-product-card__regular-price">
+              {{ product.price | money }}
+            </span>
+
+          {% endif %}
+
+        </div>
+
+      </div>
+
+
+      <!-- ===============================================
+           HOVER INFORMATION
+      ================================================ -->
+
+      <div class="fur-product-card__hover-information">
+
+        {% if option_to_show != blank %}
+
+          <div class="fur-product-card__options">
+
+            {% for value in option_to_show.values %}
+
+              <span class="fur-product-card__option">
+                {{ value }}
+              </span>
+
+            {% endfor %}
+
+          </div>
+
+
+        {% else %}
+
+          <span class="fur-product-card__view-text">
+            {{ hover_fallback_text | default: 'VIEW PRODUCT' }}
+          </span>
+
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  </a>
+
+</article>

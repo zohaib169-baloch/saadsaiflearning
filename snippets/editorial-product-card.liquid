@@ -1,0 +1,270 @@
+{% comment %}
+  EDITORIAL PRODUCT CARD
+
+  Hover image behavior:
+  Image 1 → Image 2 → Image 3 → STOP
+
+  Image 2 passes through without stopping.
+  Mouse leave resets to Image 1.
+{% endcomment %}
+
+
+{%- liquid
+
+  assign image_1 = blank
+  assign image_2 = blank
+  assign image_3 = blank
+
+
+  if product.images.size > 0
+    assign image_1 = product.images[0]
+  endif
+
+
+  if product.images.size > 1
+    assign image_2 = product.images[1]
+  endif
+
+
+  if product.images.size > 2
+    assign image_3 = product.images[2]
+  endif
+
+
+  assign product_badge = blank
+  assign product_badge_type = blank
+
+
+  if show_badges
+
+    if product.available == false
+
+      assign product_badge = sold_out_badge | default: 'SOLD OUT'
+      assign product_badge_type = 'sold-out'
+
+    elsif product.compare_at_price_max > product.price
+
+      assign product_badge = sale_badge | default: 'SALE'
+      assign product_badge_type = 'sale'
+
+    elsif badge_tag != blank and product.tags contains badge_tag
+
+      assign product_badge = custom_badge | default: badge_tag
+      assign product_badge_type = 'custom'
+
+    endif
+
+  endif
+
+
+  assign option_to_show = blank
+
+
+  if option_name != blank
+
+    for option in product.options_with_values
+
+      if option.name == option_name
+
+        assign option_to_show = option
+        break
+
+      endif
+
+    endfor
+
+  endif
+
+
+  if option_to_show == blank
+    assign option_to_show = product.options_with_values.first
+  endif
+
+-%}
+
+
+<article
+  class="editorial-product-card"
+  data-editorial-product-card
+  role="listitem"
+>
+
+  <a
+    href="{{ product.url }}"
+    class="editorial-product-card__link"
+    data-featured-card-link
+    aria-label="{{ product.title | escape }}"
+  >
+
+
+    <!-- ===============================================
+         MEDIA
+    ================================================ -->
+
+    <div
+      class="
+        editorial-product-card__media
+        editorial-product-card__media--{{ image_ratio | default: 'portrait' }}
+      "
+      data-editorial-card-media
+
+      {% if image_ratio == 'adapt' and image_1 != blank %}
+        style="
+          --ef-image-ratio:
+          {{ image_1.aspect_ratio }};
+        "
+      {% endif %}
+    >
+
+
+      {% if image_1 != blank %}
+
+        {{
+          image_1
+          | image_url: width: 1600
+          | image_tag:
+            class: 'editorial-product-card__image editorial-product-card__image--slide is-active',
+            loading: 'lazy',
+            widths: '320, 480, 640, 800, 1000, 1200, 1600',
+            sizes: '(min-width: 750px) 320px, 80vw',
+            alt: product.title,
+            data-editorial-card-image: '0'
+        }}
+
+      {% else %}
+
+        {{
+          'product-1'
+          | placeholder_svg_tag:
+            'editorial-product-card__placeholder'
+        }}
+
+      {% endif %}
+
+
+      {% if image_2 != blank %}
+
+        {{
+          image_2
+          | image_url: width: 1600
+          | image_tag:
+            class: 'editorial-product-card__image editorial-product-card__image--slide',
+            loading: 'lazy',
+            widths: '320, 480, 640, 800, 1000, 1200, 1600',
+            sizes: '(min-width: 750px) 320px, 80vw',
+            alt: product.title,
+            data-editorial-card-image: '1'
+        }}
+
+      {% endif %}
+
+
+      {% if image_3 != blank %}
+
+        {{
+          image_3
+          | image_url: width: 1600
+          | image_tag:
+            class: 'editorial-product-card__image editorial-product-card__image--slide',
+            loading: 'lazy',
+            widths: '320, 480, 640, 800, 1000, 1200, 1600',
+            sizes: '(min-width: 750px) 320px, 80vw',
+            alt: product.title,
+            data-editorial-card-image: '2'
+        }}
+
+      {% endif %}
+
+
+      {% if product_badge != blank %}
+
+        <span
+          class="
+            editorial-product-card__badge
+            editorial-product-card__badge--{{ product_badge_type }}
+          "
+        >
+          {{ product_badge }}
+        </span>
+
+      {% endif %}
+
+    </div>
+
+
+    <!-- ===============================================
+         INFORMATION
+    ================================================ -->
+
+    <div class="editorial-product-card__information">
+
+
+      <div class="editorial-product-card__default-information">
+
+        <h3 class="editorial-product-card__title">
+          {{ product.title }}
+        </h3>
+
+
+        <div class="editorial-product-card__price">
+
+          {% if product.compare_at_price_max > product.price %}
+
+            <span class="editorial-product-card__sale-price">
+              {{ product.price | money }}
+            </span>
+
+
+            {% if show_compare_price %}
+
+              <s class="editorial-product-card__compare-price">
+                {{ product.compare_at_price_max | money }}
+              </s>
+
+            {% endif %}
+
+
+          {% else %}
+
+            <span>
+              {{ product.price | money }}
+            </span>
+
+          {% endif %}
+
+        </div>
+
+      </div>
+
+
+      <div class="editorial-product-card__hover-information">
+
+        {% if option_to_show != blank %}
+
+          <div class="editorial-product-card__options">
+
+            {% for value in option_to_show.values %}
+
+              <span class="editorial-product-card__option">
+                {{ value }}
+              </span>
+
+            {% endfor %}
+
+          </div>
+
+        {% else %}
+
+          <span class="editorial-product-card__view-text">
+            {{ hover_fallback_text | default: 'VIEW PRODUCT' }}
+          </span>
+
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  </a>
+
+</article>

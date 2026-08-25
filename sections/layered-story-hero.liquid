@@ -1,0 +1,937 @@
+{{ 'layered-story-hero.css' | asset_url | stylesheet_tag }}
+
+<script
+  src="{{ 'layered-story-hero.js' | asset_url }}"
+  defer
+></script>
+
+
+<section
+  id="LayeredStoryHero-{{ section.id }}"
+  class="
+    layered-story-hero
+    layered-story-hero--height-{{ section.settings.height_mode }}
+  "
+  data-layered-story-hero
+
+  {% if section.settings.height_mode == 'adapt'
+    and section.settings.background_desktop != blank
+  %}
+    style="
+      --lsh-bg: {{ section.settings.background_color }};
+      --lsh-text: {{ section.settings.text_color }};
+      --lsh-accent: {{ section.settings.accent_color }};
+
+      --lsh-background-ratio-desktop:
+        {{ section.settings.background_desktop.aspect_ratio }};
+
+      {% if section.settings.background_mobile != blank %}
+        --lsh-background-ratio-mobile:
+          {{ section.settings.background_mobile.aspect_ratio }};
+      {% else %}
+        --lsh-background-ratio-mobile:
+          {{ section.settings.background_desktop.aspect_ratio }};
+      {% endif %}
+
+      --lsh-height-desktop: {{ section.settings.height_desktop }}vh;
+      --lsh-height-mobile: {{ section.settings.height_mobile }}vh;
+
+      --lsh-background-fit: {{ section.settings.background_fit }};
+      --lsh-background-position: {{ section.settings.background_position }};
+
+      --lsh-art-width-desktop: {{ section.settings.art_width_desktop }}%;
+      --lsh-art-x-desktop: {{ section.settings.art_x_desktop }}%;
+      --lsh-art-y-desktop: {{ section.settings.art_y_desktop }}%;
+
+      --lsh-art-width-mobile: {{ section.settings.art_width_mobile }}%;
+      --lsh-art-x-mobile: {{ section.settings.art_x_mobile }}%;
+      --lsh-art-y-mobile: {{ section.settings.art_y_mobile }}%;
+
+      --lsh-model-width-desktop: {{ section.settings.model_width_desktop }}%;
+      --lsh-model-x-desktop: {{ section.settings.model_x_desktop }}%;
+      --lsh-model-y-desktop: {{ section.settings.model_y_desktop }}%;
+
+      --lsh-model-width-mobile: {{ section.settings.model_width_mobile }}%;
+      --lsh-model-x-mobile: {{ section.settings.model_x_mobile }}%;
+      --lsh-model-y-mobile: {{ section.settings.model_y_mobile }}%;
+
+      --lsh-parallax-x: {{ section.settings.parallax_x }}px;
+      --lsh-parallax-y: {{ section.settings.parallax_y }}px;
+
+      --lsh-copy-size-desktop: {{ section.settings.copy_size_desktop }}px;
+      --lsh-copy-size-mobile: {{ section.settings.copy_size_mobile }}px;
+
+      --lsh-large-title-desktop: {{ section.settings.large_title_desktop }}px;
+      --lsh-large-title-mobile: {{ section.settings.large_title_mobile }}px;
+
+      --lsh-small-title-desktop: {{ section.settings.small_title_desktop }}px;
+      --lsh-small-title-mobile: {{ section.settings.small_title_mobile }}px;
+
+      --lsh-cursor-size: {{ section.settings.cursor_size }}px;
+
+      --lsh-padding-x-desktop: {{ section.settings.padding_x_desktop }}px;
+      --lsh-padding-x-mobile: {{ section.settings.padding_x_mobile }}px;
+    "
+  {% else %}
+    style="
+      --lsh-bg: {{ section.settings.background_color }};
+      --lsh-text: {{ section.settings.text_color }};
+      --lsh-accent: {{ section.settings.accent_color }};
+
+      --lsh-height-desktop: {{ section.settings.height_desktop }}vh;
+      --lsh-height-mobile: {{ section.settings.height_mobile }}vh;
+
+      --lsh-background-fit: {{ section.settings.background_fit }};
+      --lsh-background-position: {{ section.settings.background_position }};
+
+      --lsh-art-width-desktop: {{ section.settings.art_width_desktop }}%;
+      --lsh-art-x-desktop: {{ section.settings.art_x_desktop }}%;
+      --lsh-art-y-desktop: {{ section.settings.art_y_desktop }}%;
+
+      --lsh-art-width-mobile: {{ section.settings.art_width_mobile }}%;
+      --lsh-art-x-mobile: {{ section.settings.art_x_mobile }}%;
+      --lsh-art-y-mobile: {{ section.settings.art_y_mobile }}%;
+
+      --lsh-model-width-desktop: {{ section.settings.model_width_desktop }}%;
+      --lsh-model-x-desktop: {{ section.settings.model_x_desktop }}%;
+      --lsh-model-y-desktop: {{ section.settings.model_y_desktop }}%;
+
+      --lsh-model-width-mobile: {{ section.settings.model_width_mobile }}%;
+      --lsh-model-x-mobile: {{ section.settings.model_x_mobile }}%;
+      --lsh-model-y-mobile: {{ section.settings.model_y_mobile }}%;
+
+      --lsh-parallax-x: {{ section.settings.parallax_x }}px;
+      --lsh-parallax-y: {{ section.settings.parallax_y }}px;
+
+      --lsh-copy-size-desktop: {{ section.settings.copy_size_desktop }}px;
+      --lsh-copy-size-mobile: {{ section.settings.copy_size_mobile }}px;
+
+      --lsh-large-title-desktop: {{ section.settings.large_title_desktop }}px;
+      --lsh-large-title-mobile: {{ section.settings.large_title_mobile }}px;
+
+      --lsh-small-title-desktop: {{ section.settings.small_title_desktop }}px;
+      --lsh-small-title-mobile: {{ section.settings.small_title_mobile }}px;
+
+      --lsh-cursor-size: {{ section.settings.cursor_size }}px;
+
+      --lsh-padding-x-desktop: {{ section.settings.padding_x_desktop }}px;
+      --lsh-padding-x-mobile: {{ section.settings.padding_x_mobile }}px;
+    "
+  {% endif %}
+>
+
+  <a
+    href="{{ section.settings.link | default: '#' }}"
+    class="layered-story-hero__link"
+    data-layered-story-link
+    aria-label="{{ section.settings.cursor_text | escape }}"
+  >
+
+
+    <!-- =====================================================
+         LAYER 1 — BACKGROUND IMAGE
+    ====================================================== -->
+
+    <div class="layered-story-hero__background">
+
+      {% if section.settings.background_desktop != blank %}
+
+        {{
+          section.settings.background_desktop
+          | image_url: width: 2600
+          | image_tag:
+            class: 'layered-story-hero__background-image layered-story-hero__background-image--desktop',
+            loading: 'lazy',
+            widths: '900, 1200, 1600, 2000, 2400, 2600',
+            sizes: '100vw',
+            alt: ''
+        }}
+
+      {% endif %}
+
+
+      {% if section.settings.background_mobile != blank %}
+
+        {{
+          section.settings.background_mobile
+          | image_url: width: 1600
+          | image_tag:
+            class: 'layered-story-hero__background-image layered-story-hero__background-image--mobile',
+            loading: 'lazy',
+            widths: '480, 720, 960, 1200, 1600',
+            sizes: '100vw',
+            alt: ''
+        }}
+
+      {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         LAYER 2 — BOLD / RED ARTWORK
+    ====================================================== -->
+
+    <div
+      class="layered-story-hero__art"
+      data-layered-story-art
+    >
+
+      {% if section.settings.art_desktop != blank %}
+
+        {{
+          section.settings.art_desktop
+          | image_url: width: 2200
+          | image_tag:
+            class: 'layered-story-hero__art-image layered-story-hero__art-image--desktop',
+            loading: 'lazy',
+            widths: '600, 900, 1200, 1600, 1900, 2200',
+            sizes: '100vw',
+            alt: ''
+        }}
+
+      {% endif %}
+
+
+      {% if section.settings.art_mobile != blank %}
+
+        {{
+          section.settings.art_mobile
+          | image_url: width: 1600
+          | image_tag:
+            class: 'layered-story-hero__art-image layered-story-hero__art-image--mobile',
+            loading: 'lazy',
+            widths: '480, 720, 960, 1200, 1600',
+            sizes: '100vw',
+            alt: ''
+        }}
+
+      {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         LAYER 3 — MODEL / FOREGROUND PNG
+    ====================================================== -->
+
+    <div class="layered-story-hero__model">
+
+      {% if section.settings.model_desktop != blank %}
+
+        {{
+          section.settings.model_desktop
+          | image_url: width: 2200
+          | image_tag:
+            class: 'layered-story-hero__model-image layered-story-hero__model-image--desktop',
+            loading: 'lazy',
+            widths: '600, 900, 1200, 1600, 1900, 2200',
+            sizes: '100vw',
+            alt: section.settings.model_alt
+        }}
+
+      {% endif %}
+
+
+      {% if section.settings.model_mobile != blank %}
+
+        {{
+          section.settings.model_mobile
+          | image_url: width: 1600
+          | image_tag:
+            class: 'layered-story-hero__model-image layered-story-hero__model-image--mobile',
+            loading: 'lazy',
+            widths: '480, 720, 960, 1200, 1600',
+            sizes: '100vw',
+            alt: section.settings.model_alt
+        }}
+
+      {% endif %}
+
+    </div>
+
+
+    <!-- =====================================================
+         TOP LEFT TITLE
+    ====================================================== -->
+
+    {% if section.settings.top_left_title != blank %}
+
+      <div class="layered-story-hero__top-left">
+
+        <strong class="layered-story-hero__top-left-title">
+          {{ section.settings.top_left_title }}
+        </strong>
+
+
+        {% if section.settings.top_left_suffix != blank %}
+
+          <span class="layered-story-hero__top-left-suffix">
+            ({{ section.settings.top_left_suffix }})
+          </span>
+
+        {% endif %}
+
+      </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         TOP RIGHT COPY
+    ====================================================== -->
+
+    {% if section.settings.top_right_copy != blank %}
+
+      <div class="layered-story-hero__top-right">
+        {{ section.settings.top_right_copy }}
+      </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         LEFT SIDE TEXT
+    ====================================================== -->
+
+    {% if section.settings.left_side_text != blank %}
+
+      <div class="layered-story-hero__side layered-story-hero__side--left">
+        {{ section.settings.left_side_text }}
+      </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         RIGHT SIDE TEXT
+    ====================================================== -->
+
+    {% if section.settings.right_side_text != blank %}
+
+      <div class="layered-story-hero__side layered-story-hero__side--right">
+        {{ section.settings.right_side_text }}
+      </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         BOTTOM LEFT COPY
+    ====================================================== -->
+
+    {% if section.settings.bottom_left_copy != blank %}
+
+      <div class="layered-story-hero__bottom-left">
+        {{ section.settings.bottom_left_copy }}
+      </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         BOTTOM RIGHT TITLE
+    ====================================================== -->
+
+    {% if section.settings.bottom_large_title != blank %}
+
+      <div class="layered-story-hero__bottom-right">
+
+        {% if section.settings.bottom_small_title != blank %}
+
+          <span class="layered-story-hero__bottom-small">
+            ({{ section.settings.bottom_small_title }})
+          </span>
+
+        {% endif %}
+
+
+        <strong class="layered-story-hero__bottom-large">
+          {{ section.settings.bottom_large_title }}
+        </strong>
+
+      </div>
+
+    {% endif %}
+
+
+    <!-- =====================================================
+         MOBILE CTA
+    ====================================================== -->
+
+    {% if section.settings.show_mobile_cta %}
+
+      <span class="layered-story-hero__mobile-cta">
+        [&nbsp;{{ section.settings.cursor_text }}&nbsp;]
+      </span>
+
+    {% endif %}
+
+  </a>
+
+
+  <!-- =====================================================
+       CUSTOM CURSOR
+  ====================================================== -->
+
+  <div
+    class="layered-story-hero__cursor"
+    data-layered-story-cursor
+    aria-hidden="true"
+  >
+    [&nbsp;{{ section.settings.cursor_text }}&nbsp;]
+  </div>
+
+</section>
+
+
+{% schema %}
+{
+  "name": "Layered story hero",
+  "tag": "section",
+  "class": "section-layered-story-hero",
+
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "Link & cursor"
+    },
+
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Section link"
+    },
+
+    {
+      "type": "text",
+      "id": "cursor_text",
+      "label": "Cursor text",
+      "default": "WHO WE ARE"
+    },
+
+    {
+      "type": "range",
+      "id": "cursor_size",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Cursor text size",
+      "default": 10
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_mobile_cta",
+      "label": "Show CTA on mobile",
+      "default": true
+    },
+
+
+    {
+      "type": "header",
+      "content": "Background"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "background_desktop",
+      "label": "Desktop background image"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "background_mobile",
+      "label": "Mobile background image"
+    },
+
+    {
+      "type": "select",
+      "id": "background_fit",
+      "label": "Background fitting",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Contain"
+        }
+      ],
+      "default": "cover"
+    },
+
+    {
+      "type": "select",
+      "id": "background_position",
+      "label": "Background position",
+      "options": [
+        {
+          "value": "center center",
+          "label": "Center"
+        },
+        {
+          "value": "center top",
+          "label": "Top"
+        },
+        {
+          "value": "center bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "left center",
+          "label": "Left"
+        },
+        {
+          "value": "right center",
+          "label": "Right"
+        }
+      ],
+      "default": "center center"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Bold artwork"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "art_desktop",
+      "label": "Desktop artwork PNG"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "art_mobile",
+      "label": "Mobile artwork PNG"
+    },
+
+    {
+      "type": "range",
+      "id": "art_width_desktop",
+      "min": 10,
+      "max": 120,
+      "step": 2,
+      "unit": "%",
+      "label": "Desktop artwork width",
+      "default": 46
+    },
+
+    {
+      "type": "range",
+      "id": "art_x_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop artwork horizontal position",
+      "default": 53
+    },
+
+    {
+      "type": "range",
+      "id": "art_y_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop artwork vertical position",
+      "default": 43
+    },
+
+    {
+      "type": "range",
+      "id": "art_width_mobile",
+      "min": 20,
+      "max": 140,
+      "step": 2,
+      "unit": "%",
+      "label": "Mobile artwork width",
+      "default": 84
+    },
+
+    {
+      "type": "range",
+      "id": "art_x_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile artwork horizontal position",
+      "default": 50
+    },
+
+    {
+      "type": "range",
+      "id": "art_y_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile artwork vertical position",
+      "default": 42
+    },
+
+    {
+      "type": "range",
+      "id": "parallax_x",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal artwork movement",
+      "default": 14
+    },
+
+    {
+      "type": "range",
+      "id": "parallax_y",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Vertical artwork movement",
+      "default": 8
+    },
+
+
+    {
+      "type": "header",
+      "content": "Foreground model"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "model_desktop",
+      "label": "Desktop model PNG"
+    },
+
+    {
+      "type": "image_picker",
+      "id": "model_mobile",
+      "label": "Mobile model PNG"
+    },
+
+    {
+      "type": "text",
+      "id": "model_alt",
+      "label": "Model alt text"
+    },
+
+{
+  "type": "range",
+  "id": "model_width_desktop",
+  "min": 15,
+  "max": 80,
+  "step": 1,
+  "unit": "%",
+  "label": "Desktop model width",
+  "default": 32
+},
+
+    {
+      "type": "range",
+      "id": "model_x_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop model horizontal position",
+      "default": 53
+    },
+
+    {
+      "type": "range",
+      "id": "model_y_desktop",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Desktop model vertical position",
+      "default": 52
+    },
+
+    {
+      "type": "range",
+      "id": "model_width_mobile",
+      "min": 30,
+      "max": 120,
+      "step": 2,
+      "unit": "%",
+      "label": "Mobile model width",
+      "default": 92
+    },
+
+    {
+      "type": "range",
+      "id": "model_x_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile model horizontal position",
+      "default": 50
+    },
+
+    {
+      "type": "range",
+      "id": "model_y_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Mobile model vertical position",
+      "default": 53
+    },
+
+
+    {
+      "type": "header",
+      "content": "Top content"
+    },
+
+    {
+      "type": "text",
+      "id": "top_left_title",
+      "label": "Top-left large title",
+      "default": "SPACE"
+    },
+
+    {
+      "type": "text",
+      "id": "top_left_suffix",
+      "label": "Top-left suffix",
+      "default": "TRANSFORMATION"
+    },
+
+    {
+      "type": "richtext",
+      "id": "top_right_copy",
+      "label": "Top-right text",
+      "default": "<p>OUR PIECES ARE BUILT TO <strong>LAST.</strong><br>NOT TO BE <strong>REPLACED.</strong></p>"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Side content"
+    },
+
+    {
+      "type": "text",
+      "id": "left_side_text",
+      "label": "Left-side text"
+    },
+
+    {
+      "type": "text",
+      "id": "right_side_text",
+      "label": "Right-side text"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Bottom content"
+    },
+
+    {
+      "type": "richtext",
+      "id": "bottom_left_copy",
+      "label": "Bottom-left text",
+      "default": "<p><strong>SEROTONINN</strong> IS ABOUT WEARING WHAT EMPOWERS YOU — WHAT MIRRORS YOUR <strong>EMOTIONS</strong>, YOUR <strong>ENERGY</strong>, YOUR <strong>ESSENCE</strong>.</p>"
+    },
+
+    {
+      "type": "text",
+      "id": "bottom_small_title",
+      "label": "Bottom-right small title",
+      "default": "CREATIVE"
+    },
+
+    {
+      "type": "text",
+      "id": "bottom_large_title",
+      "label": "Bottom-right large title",
+      "default": "FREEDOM."
+    },
+
+
+    {
+      "type": "header",
+      "content": "Typography"
+    },
+
+    {
+      "type": "range",
+      "id": "copy_size_desktop",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop copy size",
+      "default": 11
+    },
+
+    {
+      "type": "range",
+      "id": "copy_size_mobile",
+      "min": 8,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile copy size",
+      "default": 9
+    },
+
+    {
+      "type": "range",
+      "id": "large_title_desktop",
+      "min": 20,
+      "max": 180,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop large title",
+      "default": 74
+    },
+
+    {
+      "type": "range",
+      "id": "large_title_mobile",
+      "min": 26,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile large title",
+      "default": 48
+    },
+
+    {
+      "type": "range",
+      "id": "small_title_desktop",
+      "min": 10,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop small title",
+      "default": 23
+    },
+
+    {
+      "type": "range",
+      "id": "small_title_mobile",
+      "min": 8,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile small title",
+      "default": 14
+    },
+
+
+    {
+      "type": "header",
+      "content": "Section size"
+    },
+    {
+  "type": "select",
+  "id": "height_mode",
+  "label": "Section height",
+  "options": [
+    {
+      "value": "cover",
+      "label": "Cover screen"
+    },
+    {
+      "value": "adapt",
+      "label": "Adapt to background image"
+    }
+  ],
+  "default": "adapt"
+},
+
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "min": 50,
+      "max": 120,
+      "step": 5,
+      "unit": "vh",
+      "label": "Desktop height",
+      "default": 90
+    },
+
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "min": 50,
+      "max": 120,
+      "step": 5,
+      "unit": "vh",
+      "label": "Mobile height",
+      "default": 85
+    },
+
+    {
+      "type": "range",
+      "id": "padding_x_desktop",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop side padding",
+      "default": 24
+    },
+
+    {
+      "type": "range",
+      "id": "padding_x_mobile",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile side padding",
+      "default": 12
+    },
+
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Fallback background",
+      "default": "#ffffff"
+    },
+
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#111111"
+    },
+
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent text color",
+      "default": "#ff2e2e"
+    }
+
+  ],
+
+  "presets": [
+    {
+      "name": "Layered story hero"
+    }
+  ]
+}
+{% endschema %}

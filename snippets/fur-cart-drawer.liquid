@@ -1,0 +1,405 @@
+<div
+  class="fur-cart-overlay"
+  data-fur-cart-overlay
+  aria-hidden="true"
+></div>
+
+<aside
+  class="fur-cart-drawer"
+  data-fur-cart-drawer
+  aria-hidden="true"
+  aria-label="Shopping cart"
+>
+
+  <div class="fur-cart-drawer__inner">
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <div class="fur-cart-drawer__header">
+
+      <div class="fur-cart-drawer__heading">
+        YOUR BAG
+      </div>
+
+
+      <div class="fur-cart-drawer__count">
+        [
+        <span data-fur-cart-count>
+          {{ cart.item_count }}
+        </span>
+        -
+        {% if cart.item_count == 1 %}
+          ITEM
+        {% else %}
+          ITEMS
+        {% endif %}
+        ]
+      </div>
+
+
+      <button
+        type="button"
+        class="fur-cart-drawer__close"
+        data-fur-cart-close
+        aria-label="Close cart"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <!-- =========================================
+         CART CONTENT
+    ========================================== -->
+
+    <div
+      class="fur-cart-drawer__content"
+      data-fur-cart-content
+    >
+
+      {% if cart.item_count > 0 %}
+
+
+        <!-- =====================================
+             CART ITEMS
+        ====================================== -->
+
+        <div
+          class="fur-cart-drawer__items"
+          data-fur-cart-items
+        >
+
+          {% for item in cart.items %}
+
+            <article
+              class="fur-cart-item"
+              data-fur-cart-item
+              data-line="{{ forloop.index }}"
+              data-key="{{ item.key }}"
+            >
+
+
+              <!-- IMAGE -->
+
+              <a
+                href="{{ item.url }}"
+                class="fur-cart-item__image-link"
+              >
+
+                {% if item.image != blank %}
+
+                  {{
+                    item.image
+                    | image_url: width: 500
+                    | image_tag:
+                      class: 'fur-cart-item__image',
+                      loading: 'lazy',
+                      widths: '120, 180, 240, 360, 500',
+                      alt: item.product.title
+                  }}
+
+                {% endif %}
+
+              </a>
+
+
+              <!-- INFO -->
+
+              <div class="fur-cart-item__info">
+
+
+                <div class="fur-cart-item__top">
+
+
+                  <div class="fur-cart-item__title-area">
+
+                    <a
+                      href="{{ item.url }}"
+                      class="fur-cart-item__title"
+                    >
+                      {{ item.product.title }}
+                    </a>
+
+
+                    {% unless item.product.has_only_default_variant %}
+
+                      <div class="fur-cart-item__variant">
+
+                        {% for option in item.options_with_values %}
+
+                          <span class="fur-cart-item__variant-option">
+                            [
+                            {{ option.value }}
+                            ]
+                          </span>
+
+                        {% endfor %}
+
+                      </div>
+
+                    {% endunless %}
+
+                  </div>
+
+
+                  <div
+                    class="fur-cart-item__price"
+                    data-fur-cart-item-price
+                  >
+
+                    {% if item.original_line_price > item.final_line_price %}
+
+                      <s class="fur-cart-item__compare-price">
+                        {{ item.original_line_price | money }}
+                      </s>
+
+                    {% endif %}
+
+
+                    <span class="fur-cart-item__current-price">
+                      {{ item.final_line_price | money }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <!-- CONTROLS -->
+
+                <div class="fur-cart-item__bottom">
+
+
+                  <!-- QUANTITY -->
+
+                  <div class="fur-cart-item__quantity">
+
+                    <span class="fur-cart-item__quantity-bracket">
+                      [
+                    </span>
+
+                    <button
+                      type="button"
+                      class="fur-cart-item__quantity-button"
+                      data-fur-cart-minus
+                      aria-label="Decrease quantity"
+                    >
+                      −
+                    </button>
+
+
+                    <span
+                      class="fur-cart-item__quantity-value"
+                      data-fur-cart-quantity
+                    >
+                      {{ item.quantity }}
+                    </span>
+
+
+                    <button
+                      type="button"
+                      class="fur-cart-item__quantity-button"
+                      data-fur-cart-plus
+                      aria-label="Increase quantity"
+                    >
+                      +
+                    </button>
+
+                    <span class="fur-cart-item__quantity-bracket">
+                      ]
+                    </span>
+
+                  </div>
+
+
+                  <!-- ACTIONS -->
+
+                  <div class="fur-cart-item__actions">
+
+                    <button
+                      type="button"
+                      class="fur-cart-item__action"
+                      data-fur-cart-remove
+                    >
+                      REMOVE
+                    </button>
+
+
+                    <button
+                      type="button"
+                      class="fur-cart-item__action"
+                      data-fur-cart-favorite
+                    >
+                      ADD TO FAVORITES
+                    </button>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </article>
+
+          {% endfor %}
+
+        </div>
+
+
+        <!-- =====================================
+             RELATED PRODUCTS
+        ====================================== -->
+
+        <div class="fur-cart-drawer__recommendations">
+
+          <div class="fur-cart-drawer__recommendations-header">
+
+            <span>
+              YOU MAY ALSO LIKE
+            </span>
+
+            <span
+              class="fur-cart-drawer__recommendations-line"
+              aria-hidden="true"
+            ></span>
+
+          </div>
+
+
+          <div
+            class="fur-cart-drawer__recommendations-track"
+            data-fur-cart-recommendations
+          >
+
+            <!--
+              Step 2:
+              we will populate this with AJAX
+              product recommendations.
+            -->
+
+          </div>
+
+        </div>
+
+
+        <!-- =====================================
+             CART SUMMARY
+        ====================================== -->
+
+        <div class="fur-cart-drawer__summary">
+
+
+          <div class="fur-cart-drawer__subtotal-row">
+
+            <span class="fur-cart-drawer__subtotal-label">
+              SUBTOTAL:
+            </span>
+
+
+            <span
+              class="fur-cart-drawer__subtotal-value"
+              data-fur-cart-subtotal
+            >
+              [
+              {{ cart.total_price | money }}
+              ]
+            </span>
+
+          </div>
+
+
+          <!-- CHECKOUT -->
+
+          <form
+            action="{{ routes.cart_url }}"
+            method="post"
+            class="fur-cart-drawer__checkout-form"
+          >
+
+            <button
+              type="submit"
+              name="checkout"
+              class="fur-cart-drawer__checkout"
+            >
+              <span>
+                [
+              </span>
+
+              <span>
+                CHECKOUT
+              </span>
+
+              <span>
+                ]
+              </span>
+            </button>
+
+          </form>
+
+
+          <!-- FOOTER NOTES -->
+
+          <div class="fur-cart-drawer__footer-notes">
+
+            <div class="fur-cart-drawer__footer-note">
+              TAXES, SHIPPING, AND
+              <span>
+                DISCOUNTS
+              </span>
+              ARE CALCULATED WITH
+              <span>
+                GIFT CARDS
+              </span>
+              APPLIED AT CHECKOUT
+            </div>
+
+
+            <div class="fur-cart-drawer__footer-note fur-cart-drawer__footer-note--right">
+              PROMOTIONAL CODES
+              <span>
+                AT CHECKOUT
+              </span>
+            </div>
+
+          </div>
+
+        </div>
+
+
+      {% else %}
+
+
+        <!-- =====================================
+             EMPTY CART
+        ====================================== -->
+
+        <div class="fur-cart-drawer__empty">
+
+          <div class="fur-cart-drawer__empty-title">
+            YOUR BAG IS EMPTY
+          </div>
+
+
+          <a
+            href="{{ routes.all_products_collection_url }}"
+            class="fur-cart-drawer__continue"
+          >
+            [
+            CONTINUE SHOPPING
+            ]
+          </a>
+
+        </div>
+
+
+      {% endif %}
+
+    </div>
+
+  </div>
+
+</aside>

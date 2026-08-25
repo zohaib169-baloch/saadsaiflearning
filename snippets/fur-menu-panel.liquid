@@ -1,0 +1,275 @@
+<div
+  class="fur-menu-panel"
+  id="FurMenuPanel-{{ section.id }}"
+  data-fur-menu-panel
+  aria-hidden="true"
+>
+
+  <div class="fur-menu-panel__inner">
+
+
+    {% if section.settings.menu_image != blank %}
+
+      <div class="fur-menu-panel__media">
+
+        {{
+          section.settings.menu_image
+          | image_url: width: 1400
+          | image_tag:
+            class: 'fur-menu-panel__image',
+            loading: 'lazy',
+            widths: '400, 600, 800, 1000, 1200, 1400'
+        }}
+
+      </div>
+
+    {% endif %}
+
+
+    <!-- =========================================
+         MAIN MENU VIEW
+    ========================================== -->
+
+    <div
+      class="fur-menu-panel__view is-active"
+      data-fur-menu-view
+    >
+
+      <div class="fur-menu-panel__links">
+
+        {% if section.settings.main_menu != blank %}
+
+          {% for link in section.settings.main_menu.links %}
+
+            <a
+              href="{{ link.url }}"
+              class="fur-menu-panel__item"
+            >
+
+              <span class="fur-menu-panel__label">
+                [ {{ link.title }} ]
+              </span>
+
+
+              {% if link.type == 'collection_link' and link.object != blank %}
+
+                <span class="fur-menu-panel__number">
+                  [
+                  {% if link.object.products_count < 10 %}0{% endif %}{{ link.object.products_count }}
+                  ]
+                </span>
+
+              {% endif %}
+
+            </a>
+
+
+            {% if link.links != blank %}
+
+              <div class="fur-menu-panel__children">
+
+                {% for child_link in link.links %}
+
+                  <a
+                    href="{{ child_link.url }}"
+                    class="
+                      fur-menu-panel__item
+                      fur-menu-panel__item--child
+                    "
+                  >
+
+                    <span class="fur-menu-panel__label">
+                      [ {{ child_link.title }} ]
+                    </span>
+
+
+                    {% if child_link.type == 'collection_link' and child_link.object != blank %}
+
+                      <span class="fur-menu-panel__number">
+                        [
+                        {% if child_link.object.products_count < 10 %}0{% endif %}{{ child_link.object.products_count }}
+                        ]
+                      </span>
+
+                    {% endif %}
+
+                  </a>
+
+                {% endfor %}
+
+              </div>
+
+            {% endif %}
+
+          {% endfor %}
+
+
+        {% else %}
+
+          <a href="#" class="fur-menu-panel__item">
+            <span class="fur-menu-panel__label">
+              [ COLLECTIONS ]
+            </span>
+          </a>
+
+          <a href="#" class="fur-menu-panel__item">
+            <span class="fur-menu-panel__label">
+              [ CAMPAIGN ]
+            </span>
+          </a>
+
+          <a href="#" class="fur-menu-panel__item">
+            <span class="fur-menu-panel__label">
+              [ WHO WE ARE ]
+            </span>
+          </a>
+
+          <a href="#" class="fur-menu-panel__item">
+            <span class="fur-menu-panel__label">
+              [ CONTACT ]
+            </span>
+          </a>
+
+        {% endif %}
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================================
+         CATEGORIES VIEW
+    ========================================== -->
+
+    <div
+      class="fur-menu-panel__view"
+      data-fur-categories-view
+    >
+
+      <div class="fur-menu-panel__links">
+
+        {% if section.settings.categories_menu != blank %}
+
+          {% for link in section.settings.categories_menu.links %}
+
+            <a
+              href="{{ link.url }}"
+              class="fur-menu-panel__item"
+            >
+
+              <span class="fur-menu-panel__label">
+                [ {{ link.title }} ]
+              </span>
+
+
+              {% if link.type == 'collection_link' and link.object != blank %}
+
+                <span class="fur-menu-panel__number">
+                  [
+                  {% if link.object.products_count < 10 %}0{% endif %}{{ link.object.products_count }}
+                  ]
+                </span>
+
+              {% endif %}
+
+            </a>
+
+
+            {% if link.links != blank %}
+
+              <div class="fur-menu-panel__children">
+
+                {% for child_link in link.links %}
+
+                  <a
+                    href="{{ child_link.url }}"
+                    class="
+                      fur-menu-panel__item
+                      fur-menu-panel__item--child
+                    "
+                  >
+
+                    <span class="fur-menu-panel__label">
+                      [ {{ child_link.title }} ]
+                    </span>
+
+
+                    {% if child_link.type == 'collection_link' and child_link.object != blank %}
+
+                      <span class="fur-menu-panel__number">
+                        [
+                        {% if child_link.object.products_count < 10 %}0{% endif %}{{ child_link.object.products_count }}
+                        ]
+                      </span>
+
+                    {% endif %}
+
+                  </a>
+
+                {% endfor %}
+
+              </div>
+
+            {% endif %}
+
+          {% endfor %}
+
+
+        {% else %}
+
+          <a href="#" class="fur-menu-panel__item">
+            <span class="fur-menu-panel__label">
+              [ BAGS ]
+            </span>
+          </a>
+
+          <a href="#" class="fur-menu-panel__item">
+            <span class="fur-menu-panel__label">
+              [ BELTS ]
+            </span>
+          </a>
+
+          <a href="#" class="fur-menu-panel__item">
+            <span class="fur-menu-panel__label">
+              [ ACCESSORIES ]
+            </span>
+          </a>
+
+        {% endif %}
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <div class="fur-menu-panel__footer">
+
+      {% if section.settings.menu_footer_left != blank %}
+        <span>
+          {{ section.settings.menu_footer_left }}
+        </span>
+      {% endif %}
+
+
+      {% if section.settings.menu_footer_center != blank %}
+        <span>
+          {{ section.settings.menu_footer_center }}
+        </span>
+      {% endif %}
+
+
+      {% if section.settings.menu_footer_right != blank %}
+        <span>
+          {{ section.settings.menu_footer_right }}
+        </span>
+      {% endif %}
+
+    </div>
+
+  </div>
+
+</div>

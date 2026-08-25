@@ -1,0 +1,531 @@
+{{ 'editorial-featured.css' | asset_url | stylesheet_tag }}
+{{ 'fur-related-products.css' | asset_url | stylesheet_tag }}
+
+<script
+  src="{{ 'fur-related-products.js' | asset_url }}"
+  defer
+></script>
+
+<section
+  id="FurRelatedProducts-{{ section.id }}"
+  class="fur-related-products"
+
+  data-fur-related-products
+  data-product-id="{{ product.id }}"
+  data-section-id="{{ section.id }}"
+  data-products-limit="{{ section.settings.products_to_show }}"
+
+  style="
+    --fur-related-background: {{ section.settings.background_color }};
+    --fur-related-text: {{ section.settings.text_color }};
+
+    --fur-related-padding-top: {{ section.settings.padding_top }}px;
+    --fur-related-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --fur-related-padding-x: {{ section.settings.padding_horizontal }}px;
+
+    --fur-related-gap: {{ section.settings.card_gap }}px;
+
+    --fur-related-card-width: {{ section.settings.desktop_card_width }}%;
+    --fur-related-mobile-card-width: {{ section.settings.mobile_card_width }}%;
+
+    --ef-card-background: {{ section.settings.card_background }};
+    --ef-text: {{ section.settings.text_color }};
+    --ef-accent: {{ section.settings.accent_color }};
+
+    --ef-title-size: {{ section.settings.product_title_size }}px;
+    --ef-price-size: {{ section.settings.product_price_size }}px;
+    --ef-option-size: {{ section.settings.option_size }}px;
+
+    --ef-information-height: {{ section.settings.information_height }}px;
+    --ef-information-spacing: {{ section.settings.information_spacing }}px;
+
+    --ef-image-fit: {{ section.settings.image_fit }};
+    --ef-image-position: {{ section.settings.image_position }};
+
+    --ef-badge-background: {{ section.settings.badge_background }};
+    --ef-badge-text: {{ section.settings.badge_text_color }};
+    --ef-badge-size: {{ section.settings.badge_size }}px;
+
+    --ef-hover-speed: {{ section.settings.hover_speed | divided_by: 10.0 }}s;
+  "
+>
+
+<div class="fur-related-products__inner">
+
+  <div class="fur-related-products__layout">
+
+
+    <!-- LEFT SIDEBAR -->
+
+    <aside class="fur-related-products__sidebar">
+
+      <div class="fur-related-products__header">
+
+        <div class="fur-related-products__heading">
+
+          {% if section.settings.section_number != blank %}
+
+            <span class="fur-related-products__number">
+              {{ section.settings.section_number }}.
+            </span>
+
+          {% endif %}
+
+
+          {% if section.settings.heading != blank %}
+
+            <h2 class="fur-related-products__title">
+              {{ section.settings.heading }}
+            </h2>
+
+          {% endif %}
+
+        </div>
+
+      </div>
+
+
+      {% if section.settings.sidebar_text_1 != blank %}
+
+        <div
+          class="
+            fur-related-products__sidebar-copy
+            fur-related-products__sidebar-copy--one
+          "
+        >
+          {{ section.settings.sidebar_text_1 }}
+        </div>
+
+      {% endif %}
+
+
+      {% if section.settings.sidebar_text_2 != blank %}
+
+        <div
+          class="
+            fur-related-products__sidebar-copy
+            fur-related-products__sidebar-copy--two
+          "
+        >
+          {{ section.settings.sidebar_text_2 }}
+        </div>
+
+      {% endif %}
+
+
+      {% if section.settings.show_sidebar_line %}
+
+        <div
+          class="fur-related-products__sidebar-line"
+          aria-hidden="true"
+        >
+          <span></span>
+        </div>
+
+      {% endif %}
+
+    </aside>
+
+
+    <!-- PRODUCTS -->
+
+    <div class="fur-related-products__products-wrapper">
+
+
+      {% if section.settings.show_arrows %}
+
+        <div class="fur-related-products__arrows">
+
+          <button
+            type="button"
+            class="fur-related-products__arrow"
+            data-fur-related-previous
+            aria-label="Previous products"
+          >
+            ←
+          </button>
+
+
+          <button
+            type="button"
+            class="fur-related-products__arrow"
+            data-fur-related-next
+            aria-label="Next products"
+          >
+            →
+          </button>
+
+        </div>
+
+      {% endif %}
+
+
+      <div
+        class="fur-related-products__track"
+        data-fur-related-track
+        data-drag-enabled="{{ section.settings.enable_drag }}"
+        role="list"
+      >
+
+        {% if recommendations.performed and recommendations.products_count > 0 %}
+
+          {% for related_product in recommendations.products limit: section.settings.products_to_show %}
+
+            <div
+              class="fur-related-products__item"
+              data-fur-related-item
+            >
+
+              {% render 'editorial-product-card',
+                product: related_product,
+                image_ratio: section.settings.image_ratio,
+                enable_hover_image: section.settings.enable_hover_image,
+                option_name: section.settings.option_name,
+                hover_fallback_text: section.settings.hover_fallback_text,
+                show_compare_price: section.settings.show_compare_price,
+                show_badges: section.settings.show_badges,
+                sale_badge: section.settings.sale_badge,
+                sold_out_badge: section.settings.sold_out_badge,
+                badge_tag: section.settings.badge_tag,
+                custom_badge: section.settings.custom_badge
+              %}
+
+            </div>
+
+          {% endfor %}
+
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  {% if section.settings.show_custom_cursor %}
+
+    <div
+      class="fur-related-products__cursor"
+      data-fur-related-cursor
+      aria-hidden="true"
+    >
+      {{ section.settings.cursor_text }}
+    </div>
+
+  {% endif %}
+
+</div>
+
+</section>
+
+
+{% schema %}
+{
+  "name": "Fur related products",
+
+  "settings": [
+
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+
+    {
+      "type": "text",
+      "id": "section_number",
+      "label": "Section number",
+      "default": "03"
+    },
+
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "YOU MAY ALSO LIKE"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Products"
+    },
+
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "label": "Products to show",
+      "default": 8
+    },
+
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to image"
+        },
+        {
+          "value": "portrait",
+          "label": "Portrait"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ],
+      "default": "portrait"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "enable_hover_image",
+      "label": "Show alternate image on hover",
+      "default": true,
+      "info": "Uses image 3 when available and image 2 as fallback."
+    },
+
+
+    {
+      "type": "header",
+      "content": "Product information hover"
+    },
+
+    {
+      "type": "text",
+      "id": "option_name",
+      "label": "Product option to show",
+      "default": "Size",
+      "info": "For example: Size or Color."
+    },
+
+    {
+      "type": "text",
+      "id": "hover_fallback_text",
+      "label": "Fallback hover text",
+      "default": "VIEW PRODUCT"
+    },
+{
+  "type": "text",
+  "id": "sidebar_text_1",
+  "label": "Sidebar text 1",
+  "default": "(UA)"
+},
+{
+  "type": "text",
+  "id": "sidebar_text_2",
+  "label": "Sidebar text 2",
+  "default": "(SS__425)"
+},
+{
+  "type": "checkbox",
+  "id": "show_sidebar_line",
+  "label": "Show sidebar bottom line",
+  "default": true
+},
+
+    {
+      "type": "header",
+      "content": "Price"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_compare_price",
+      "label": "Show compare-at price",
+      "default": true
+    },
+
+
+    {
+      "type": "header",
+      "content": "Badges"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show badges",
+      "default": true
+    },
+
+    {
+      "type": "text",
+      "id": "sale_badge",
+      "label": "Sale badge",
+      "default": "SALE"
+    },
+
+    {
+      "type": "text",
+      "id": "sold_out_badge",
+      "label": "Sold out badge",
+      "default": "SOLD OUT"
+    },
+
+    {
+      "type": "text",
+      "id": "badge_tag",
+      "label": "Custom badge product tag",
+      "default": "Premium"
+    },
+
+    {
+      "type": "text",
+      "id": "custom_badge",
+      "label": "Custom badge text",
+      "default": "PREMIUM"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Desktop layout"
+    },
+
+    {
+      "type": "range",
+      "id": "desktop_card_width",
+      "min": 20,
+      "max": 60,
+      "step": 1,
+      "unit": "%",
+      "label": "Product card width",
+      "default": 32
+    },
+
+    {
+      "type": "range",
+      "id": "card_gap",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Space between products",
+      "default": 8
+    },
+
+    {
+      "type": "checkbox",
+      "id": "enable_drag",
+      "label": "Enable mouse drag",
+      "default": true
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+
+
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+
+    {
+      "type": "range",
+      "id": "mobile_card_width",
+      "min": 60,
+      "max": 100,
+      "step": 2,
+      "unit": "%",
+      "label": "Mobile product width",
+      "default": 82
+    },
+
+
+    {
+      "type": "header",
+      "content": "Cursor"
+    },
+
+    {
+      "type": "checkbox",
+      "id": "show_custom_cursor",
+      "label": "Show custom product cursor",
+      "default": true
+    },
+
+    {
+      "type": "text",
+      "id": "cursor_text",
+      "label": "Cursor text",
+      "default": "CLICK"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#fbf6f3"
+    },
+
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#111111"
+    },
+
+
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 8
+    },
+
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 40
+    },
+
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 40
+    }
+
+  ],
+
+  "presets": [
+    {
+      "name": "Fur related products"
+    }
+  ]
+}
+{% endschema %}
