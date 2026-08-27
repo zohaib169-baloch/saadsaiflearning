@@ -13,7 +13,34 @@
   "sections": {
     "fur_footer": {
       "type": "fur-footer",
-      "settings": {}
+      "settings": {
+        "desktop_background_image": "shopify://shop_images/footer_bg_desk-scaled.webp",
+        "mobile_background_image": "shopify://shop_images/footer_bg_mob.webp.pagespeed.ce.rooCEJ9UWX.webp",
+        "overlay_opacity": 0,
+        "primary_menu": "main-menu",
+        "utility_menu": "main-menu",
+        "bottom_menu": "main-menu",
+        "small_label": "5-HIT",
+        "show_discount_badge": true,
+        "discount_label": "DISCOUNT",
+        "discount_percentage": "10%",
+        "brand_text": "THE FUR",
+        "subscribe_heading": "SUBSCRIBE",
+        "subscribe_subheading": "LATEST NEWS",
+        "subscribe_button": "SUBSCRIBE",
+        "success_message": "THANK YOU FOR SUBSCRIBING",
+        "copyright_text": "©2026_THE FUR",
+        "social_label": "IG",
+        "social_url": "",
+        "desktop_height": 620,
+        "desktop_padding": 32,
+        "nav_font_size": 11,
+        "brand_font_size": 120,
+        "subscribe_font_size": 60,
+        "background_color": "#FBF6F3",
+        "text_color": "#ffffff",
+        "accent_color": "#ff2e2e"
+      }
     }
   },
   "order": [
