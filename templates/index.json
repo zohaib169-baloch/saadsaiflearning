@@ -187,7 +187,7 @@
     "editorial-featured": {
       "type": "editorial-featured",
       "settings": {
-        "collection": "",
+        "collection": "new-collection",
         "show_all_products": true,
         "products_to_show": 8,
         "enable_drag": true,
