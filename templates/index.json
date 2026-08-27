@@ -254,11 +254,66 @@
         "padding_top": 12,
         "padding_bottom": 24
       }
+    },
+    "layered_story_hero_Gq99Ln": {
+      "type": "layered-story-hero",
+      "name": "Layered story hero",
+      "settings": {
+        "link": "",
+        "cursor_text": "WHO WE ARE",
+        "cursor_size": 10,
+        "show_mobile_cta": true,
+        "background_desktop": "shopify://shop_images/bold_bg.webp.pagespeed.ce.8FCwwKcpP4.webp",
+        "background_mobile": "shopify://shop_images/Untitled_design.jpg",
+        "background_fit": "cover",
+        "background_position": "center center",
+        "art_desktop": "shopify://shop_images/lottie_img.webp.pagespeed.ce._FQ_Z8q9B3.webp",
+        "art_width_desktop": 46,
+        "art_x_desktop": 53,
+        "art_y_desktop": 43,
+        "art_width_mobile": 84,
+        "art_x_mobile": 50,
+        "art_y_mobile": 42,
+        "parallax_x": 14,
+        "parallax_y": 8,
+        "model_desktop": "shopify://shop_images/bold_img.webp.pagespeed.ce.NzQUIG-ghn.webp",
+        "model_mobile": "shopify://shop_images/bold_img.webp.pagespeed.ce.NzQUIG-ghn.webp",
+        "model_alt": "",
+        "model_width_desktop": 32,
+        "model_x_desktop": 56,
+        "model_y_desktop": 50,
+        "model_width_mobile": 92,
+        "model_x_mobile": 50,
+        "model_y_mobile": 53,
+        "top_left_title": "SPACE",
+        "top_left_suffix": "TRANSFORMATION",
+        "top_right_copy": "<p>OUR PIECES ARE BUILT TO <strong>LAST.</strong><br/>NOT TO BE <strong>REPLACED.</strong></p>",
+        "left_side_text": "",
+        "right_side_text": "",
+        "bottom_left_copy": "<p><strong>SEROTONINN</strong> IS ABOUT WEARING WHAT EMPOWERS YOU — WHAT MIRRORS YOUR <strong>EMOTIONS</strong>, YOUR <strong>ENERGY</strong>, YOUR <strong>ESSENCE</strong>.</p>",
+        "bottom_small_title": "CREATIVE",
+        "bottom_large_title": "FREEDOM.",
+        "copy_size_desktop": 11,
+        "copy_size_mobile": 9,
+        "large_title_desktop": 74,
+        "large_title_mobile": 48,
+        "small_title_desktop": 23,
+        "small_title_mobile": 14,
+        "height_mode": "adapt",
+        "height_desktop": 90,
+        "height_mobile": 85,
+        "padding_x_desktop": 24,
+        "padding_x_mobile": 12,
+        "background_color": "#ffffff",
+        "text_color": "#111111",
+        "accent_color": "#ff2e2e"
+      }
     }
   },
   "order": [
     "hero_banner_nbzmrq",
     "editorial-collection",
-    "editorial-featured"
+    "editorial-featured",
+    "layered_story_hero_Gq99Ln"
   ]
 }
