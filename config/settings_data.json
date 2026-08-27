@@ -7,4 +7,11 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-{}
+{
+  "current": {
+    "fur_preloader_desktop_image": "shopify://shop_images/Draped-Jersey-Dress_01W.webp.pagespeed.ce.XTvIFIzmU7.webp",
+    "fur_preloader_mobile_image": "shopify://shop_images/Draped-Jersey-Dress_04.webp.pagespeed.ce.WOD6ZCEZT.webp",
+    "fur_preloader_image_fit": "adapt",
+    "content_for_index": []
+  }
+}
