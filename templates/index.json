@@ -255,6 +255,63 @@
         "padding_bottom": 24
       }
     },
+    "categories_collections_fMaTTc": {
+      "type": "categories-collections",
+      "blocks": {
+        "collection_PPD6r7": {
+          "type": "collection",
+          "settings": {
+            "collection": "new-collection",
+            "image": "shopify://shop_images/Draped-Jersey-Dress_01W.webp.pagespeed.ce.XTvIFIzmU7.webp",
+            "title": "",
+            "subtitle": "GLAM",
+            "top_copy": "<p>INSPIRED BY BERLIN'S NIGHTLIFE, <strong>BERLIN VIBES</strong> CELEBRATES WOMEN'S BOLD SEXUALITY.</p>",
+            "copy_alignment": "left",
+            "custom_count": "",
+            "custom_link": ""
+          }
+        },
+        "collection_wTnyWH": {
+          "type": "collection",
+          "settings": {
+            "collection": "frontpage",
+            "image": "shopify://shop_images/Silk-Backless-Maxi-Dress-in-Pearl_01W.webp.pagespeed.ce.gIF70zZzgY.webp",
+            "title": "",
+            "subtitle": "GLAM",
+            "top_copy": "<p>INSPIRED BY BERLIN'S NIGHTLIFE, <strong>BERLIN VIBES</strong> CELEBRATES WOMEN'S BOLD SEXUALITY.</p>",
+            "copy_alignment": "right",
+            "custom_count": "",
+            "custom_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_PPD6r7",
+        "collection_wTnyWH"
+      ],
+      "name": "Categories collections",
+      "settings": {
+        "section_number": "05",
+        "heading": "CATEGORIES",
+        "heading_size_desktop": 18,
+        "heading_size_mobile": 14,
+        "title_size_desktop": 30,
+        "title_size_mobile": 26,
+        "copy_size_desktop": 12,
+        "copy_size_mobile": 8,
+        "card_height_desktop": 100,
+        "card_height_mobile": 75,
+        "grid_gap": 0,
+        "cursor_text": "SEE COLLECTION",
+        "show_mobile_link": true,
+        "background_color": "#fbf6f3",
+        "text_color": "#111111",
+        "accent_color": "#ff3b30",
+        "padding_horizontal": 6,
+        "padding_top": 24,
+        "padding_bottom": 24
+      }
+    },
     "layered_story_hero_Gq99Ln": {
       "type": "layered-story-hero",
       "name": "Layered story hero",
@@ -314,6 +371,7 @@
     "hero_banner_nbzmrq",
     "editorial-collection",
     "editorial-featured",
+    "categories_collections_fMaTTc",
     "layered_story_hero_Gq99Ln"
   ]
 }
