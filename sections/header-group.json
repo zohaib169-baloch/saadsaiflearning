@@ -13,7 +13,35 @@
   "sections": {
     "fur_header": {
       "type": "fur-header",
-      "settings": {}
+      "settings": {
+        "logo_text": "FUR",
+        "desktop_logo_width": 160,
+        "mobile_logo_width": 100,
+        "header_background_style": "transparent",
+        "header_position": "sticky",
+        "main_menu_heading": "MENU",
+        "main_menu": "",
+        "shop_all_label": "SHOP ALL",
+        "categories_heading": "CATEGORIES",
+        "categories_menu": "",
+        "category_count_text": "[ 5-HIT ]",
+        "bag_label": "BAG",
+        "show_search": true,
+        "search_label": "SEARCH",
+        "show_favorites": true,
+        "favorites_label": "FAVORITES",
+        "favorites_url": "",
+        "menu_bottom_text": "THE FUR",
+        "menu_footer_left": "SHIPPING AND PAYMENT",
+        "menu_footer_center": "CREDITS",
+        "menu_footer_right": "TERMS AND CONDITIONS",
+        "desktop_height": 90,
+        "horizontal_padding": 10,
+        "font_size": 11,
+        "background": "#f7f7f5",
+        "text_color": "#111111",
+        "border_color": "#d8d4cc"
+      }
     }
   },
   "order": [

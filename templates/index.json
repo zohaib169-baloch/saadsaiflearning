@@ -8,28 +8,257 @@
  * ------------------------------------------------------------
  */
 {
-    "sections": {
-        "heading": {
-            "type": "heading",
-            "settings":{}
+  "sections": {
+    "hero_banner_nbzmrq": {
+      "type": "hero-banner",
+      "blocks": {
+        "slide_xPLRi3": {
+          "type": "slide",
+          "settings": {
+            "desktop_image": "shopify://shop_images/Draped-Jersey-Dress_01W.webp.pagespeed.ce.XTvIFIzmU7.webp",
+            "mobile_image": "shopify://shop_images/Draped-Jersey-Dress_03.webp.pagespeed.ce.SP2Ny_2c8Y.webp",
+            "image_alt": "",
+            "left_heading": "SEROTONINN",
+            "right_heading": "WHERE GLAM MEETS GRUNGE",
+            "bottom_heading": "",
+            "small_label": "",
+            "link_label": "SEE COLLECTION",
+            "link": "",
+            "text_color": "#111111",
+            "accent_color": "#ff2e2e"
+          }
         },
-        "editorial-collection" : {
-            "type": "editorial-collection",
-            "settings": {}
+        "slide_FMVnq4": {
+          "type": "slide",
+          "settings": {
+            "desktop_image": "shopify://shop_images/Corset-Body-in-Energizing-Yellow_01W.webp.pagespeed.ce.lFjqzmOu47.webp",
+            "mobile_image": "shopify://shop_images/Corset-Body-in-Energizing-Yellow_03.webp.pagespeed.ce.7kfTgDA6nb.webp",
+            "image_alt": "",
+            "left_heading": "SEROTONINN",
+            "right_heading": "WHERE GLAM MEETS GRUNGE",
+            "bottom_heading": "",
+            "small_label": "",
+            "link_label": "SEE COLLECTION",
+            "link": "",
+            "text_color": "#111111",
+            "accent_color": "#ff2e2e"
+          }
         },
-        "editorial-featured": {
-            "type": "editorial-featured",
-            "settings": {}
-        },
-        "editorial-parallax-slider": {
-            "type": "editorial-parallax-slider",
-            "settings": {}
+        "slide_yFfezU": {
+          "type": "slide",
+          "settings": {
+            "desktop_image": "shopify://shop_images/Silk-Backless-Maxi-Dress-in-Pearl_01W.webp.pagespeed.ce.gIF70zZzgY.webp",
+            "mobile_image": "shopify://shop_images/Silk-Backless-Maxi-Dress-in-Pearl_03.webp",
+            "image_alt": "",
+            "left_heading": "SEROTONINN",
+            "right_heading": "WHERE GLAM MEETS GRUNGE",
+            "bottom_heading": "",
+            "small_label": "",
+            "link_label": "SEE COLLECTION",
+            "link": "",
+            "text_color": "#111111",
+            "accent_color": "#ff2e2e"
+          }
         }
+      },
+      "block_order": [
+        "slide_xPLRi3",
+        "slide_FMVnq4",
+        "slide_yFfezU"
+      ],
+      "name": "Hero banner",
+      "settings": {
+        "desktop_image_fit": "adapt",
+        "desktop_height": 100,
+        "left_text_size_desktop": 30,
+        "right_text_size_desktop": 30,
+        "left_text_size_mobile": 52,
+        "right_text_size_mobile": 36,
+        "mobile_image_fit": "adapt",
+        "mobile_height": 100,
+        "autoplay": true,
+        "slide_duration": 5,
+        "transition_duration": 1000,
+        "show_controls": false,
+        "show_dots": false,
+        "background_color": "#f7f5f2"
+      }
     },
-    "order":[
-        "heading",
-        "editorial-parallax-slider",
-        "editorial-collection",
-        "editorial-featured"  
-    ]
+    "editorial-collection": {
+      "type": "editorial-collection",
+      "blocks": {
+        "collection_card_fKTeHU": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "new-collection",
+            "custom_title": "",
+            "custom_link": "",
+            "custom_count": "",
+            "title_position": "left",
+            "image_1": "shopify://shop_images/Corset-Body-in-Energizing-Yellow_01W.webp.pagespeed.ce.lFjqzmOu47.webp",
+            "image_2": "shopify://shop_images/Draped-Jersey-Dress_04.webp.pagespeed.ce.WOD6ZCEZT.webp",
+            "image_3": "shopify://shop_images/Faux-Fur-Hat-_01W.webp.pagespeed.ce.9phLOJS2A6.webp"
+          }
+        },
+        "collection_card_paxA9y": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "new-collection",
+            "custom_title": "",
+            "custom_link": "",
+            "custom_count": "",
+            "title_position": "left",
+            "image_1": "shopify://shop_images/Draped-Jersey-Dress_01W.webp.pagespeed.ce.XTvIFIzmU7.webp",
+            "image_2": "shopify://shop_images/Draped-Jersey-Dress_04.webp.pagespeed.ce.WOD6ZCEZT.webp",
+            "image_3": "shopify://shop_images/Faux-Fur-Hat-_01W.webp.pagespeed.ce.9phLOJS2A6.webp"
+          }
+        },
+        "collection_card_HqUgdH": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "new-collection",
+            "custom_title": "",
+            "custom_link": "",
+            "custom_count": "",
+            "title_position": "left",
+            "image_1": "shopify://shop_images/Silk-Backless-Maxi-Dress-in-Pearl_01W.webp.pagespeed.ce.gIF70zZzgY.webp",
+            "image_2": "shopify://shop_images/Draped-Jersey-Dress_04.webp.pagespeed.ce.WOD6ZCEZT.webp",
+            "image_3": "shopify://shop_images/Faux-Fur-Hat-_01W.webp.pagespeed.ce.9phLOJS2A6.webp"
+          }
+        }
+      },
+      "block_order": [
+        "collection_card_fKTeHU",
+        "collection_card_paxA9y",
+        "collection_card_HqUgdH"
+      ],
+      "settings": {
+        "show_header": true,
+        "section_number": "04.",
+        "heading": "CATEGORIES",
+        "show_line": true,
+        "show_see_all": true,
+        "see_all_text": "SEE ALL",
+        "see_all_link": "",
+        "show_brackets": true,
+        "header_size": 15,
+        "mobile_header_size": 13,
+        "header_spacing": 30,
+        "cursor_size": 110,
+        "enable_autoplay": true,
+        "show_autoplay_button": true,
+        "show_autoplay_text": true,
+        "marquee_speed": 30,
+        "marquee_direction": "left",
+        "pause_on_hover": true,
+        "card_width": 320,
+        "card_height": 450,
+        "mobile_card_width": 280,
+        "mobile_card_height": 410,
+        "card_gap": 9,
+        "image_fit": "cover",
+        "image_position": "center center",
+        "hover_duration": 10,
+        "show_titles": true,
+        "title_size": 41,
+        "mobile_title_size": 32,
+        "title_weight": "900",
+        "title_letter_spacing": -4,
+        "title_offset": 8,
+        "show_count": true,
+        "count_size": 12,
+        "count_offset": 12,
+        "show_arrows": true,
+        "show_mobile_arrows": false,
+        "arrow_size": 44,
+        "arrow_background": "#ffffff",
+        "arrow_color": "#000000",
+        "background_color": "#fbf5f2",
+        "card_background": "#ffffff",
+        "text_color": "#000000",
+        "accent_color": "#ee2929",
+        "section_width": 1800,
+        "desktop_padding": 32,
+        "mobile_padding": 15,
+        "padding_top": 24,
+        "padding_bottom": 24
+      }
+    },
+    "editorial-featured": {
+      "type": "editorial-featured",
+      "settings": {
+        "collection": "",
+        "show_all_products": true,
+        "products_to_show": 8,
+        "enable_drag": true,
+        "section_number": "02.",
+        "heading": "NEW ARRIVALS",
+        "show_see_all": true,
+        "see_all_text": "SEE ALL",
+        "see_all_link": "",
+        "show_brackets": true,
+        "sidebar_text_1": "<p>(UA)</p>",
+        "sidebar_text_2": "<p>(LIFE FORCE)</p>",
+        "show_sidebar_line": true,
+        "sidebar_width": 320,
+        "heading_size": 18,
+        "mobile_heading_size": 16,
+        "sidebar_text_size": 15,
+        "sidebar_text_1_spacing": 100,
+        "sidebar_text_2_spacing": 140,
+        "image_ratio": "portrait",
+        "image_fit": "cover",
+        "image_position": "center center",
+        "enable_hover_image": true,
+        "hover_speed": 5,
+        "product_width": 320,
+        "mobile_product_width": 280,
+        "product_gap": 9,
+        "information_spacing": 8,
+        "information_height": 55,
+        "product_title_size": 14,
+        "product_price_size": 14,
+        "show_compare_price": true,
+        "option_name": "Size",
+        "option_size": 18,
+        "hover_fallback_text": "VIEW PRODUCT",
+        "show_badges": true,
+        "badge_tag": "Best Seller",
+        "custom_badge": "BEST SELLER",
+        "sale_badge": "SALE",
+        "sold_out_badge": "SOLD OUT",
+        "badge_size": 13,
+        "badge_background": "#000000",
+        "badge_text_color": "#ffffff",
+        "show_default_cursor": true,
+        "default_cursor_text": "CLICK",
+        "default_cursor_color": "#b52b2b",
+        "default_cursor_text_color": "#ffffff",
+        "cursor_size": 120,
+        "cursor_offset_x": 0,
+        "cursor_offset_y": 0,
+        "cursor_rotation": 0,
+        "show_arrows": false,
+        "show_mobile_arrows": false,
+        "arrow_size": 44,
+        "arrow_background": "#ffffff",
+        "arrow_color": "#000000",
+        "background_color": "#fbf6f3",
+        "card_background": "#f7f2f1",
+        "text_color": "#000000",
+        "accent_color": "#ff2e2e",
+        "border_color": "#d8d0cc",
+        "section_width": 1800,
+        "desktop_padding": 20,
+        "mobile_padding": 15,
+        "padding_top": 12,
+        "padding_bottom": 24
+      }
+    }
+  },
+  "order": [
+    "hero_banner_nbzmrq",
+    "editorial-collection",
+    "editorial-featured"
+  ]
 }
